@@ -1,126 +1,115 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import Link from 'next/link'
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { ImSpinner2 } from "react-icons/im";
+import { useDark } from "@/lib/dark";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { AuthError } from "@supabase/supabase-js";
 
-export default function Login() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [view, setView] = useState('sign-in')
-  const router = useRouter()
-  const supabase = createClientComponentClient()
-
-  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${location.origin}/auth/callback`,
-      },
-    })
-    setView('check-email')
-  }
+export default function Index() {
+  const [dark, toogleDark] = useDark();
+  const supabase = createClientComponentClient();
+  const [credentials, setCredentials] = useState({ email: "", password: "" });
+  const [error, setError] = useState<AuthError | null>();
+  const [fetching, setFetching] = useState(false);
+  const router = useRouter();
 
   const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-    router.push('/')
-    router.refresh()
-  }
+    e.preventDefault();
+    setFetching(true);
+    const { error } = await supabase.auth.signInWithPassword({
+      email: credentials.email + "@praktikum.its.ac.id",
+      password: credentials.password,
+    });
+
+    setFetching(false);
+
+    if (error) {
+      setError(error);
+    } else {
+      router.push("/");
+      router.refresh();
+    }
+  };
+
+  const handleChange = (event: { target: { name: any; value: any } }) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    setCredentials((values) => ({ ...values, [name]: value }));
+  };
 
   return (
-    <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
-      <Link
-        href="/"
-        className="absolute left-8 top-8 py-2 px-4 rounded-md no-underline text-foreground bg-btn-background hover:bg-btn-background-hover flex items-center group text-sm"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1"
-        >
-          <polyline points="15 18 9 12 15 6" />
-        </svg>{' '}
-        Back
-      </Link>
-      {view === 'check-email' ? (
-        <p className="text-center text-foreground">
-          Check <span className="font-bold">{email}</span> to continue signing
-          up
-        </p>
-      ) : (
-        <form
-          className="flex-1 flex flex-col w-full justify-center gap-2 text-foreground"
-          onSubmit={view === 'sign-in' ? handleSignIn : handleSignUp}
-        >
-          <label className="text-md" htmlFor="email">
-            Email
-          </label>
-          <input
-            className="rounded-md px-4 py-2 bg-inherit border mb-6"
-            name="email"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            placeholder="you@example.com"
-          />
-          <label className="text-md" htmlFor="password">
-            Password
-          </label>
-          <input
-            className="rounded-md px-4 py-2 bg-inherit border mb-6"
-            type="password"
-            name="password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            placeholder="••••••••"
-          />
-          {view === 'sign-in' && (
-            <>
-              <button className="bg-green-700 rounded px-4 py-2 text-white mb-6">
-                Sign In
-              </button>
-              <p className="text-sm text-center">
-                Don't have an account?
-                <button
-                  className="ml-1 underline"
-                  onClick={() => setView('sign-up')}
-                >
-                  Sign Up Now
+    <>
+      <div className="w-screen h-screen flex flex-col gap-2 justify-center items-center dark:bg-zinc-900">
+        <div className="card w-full max-w-md bg-base-100 shadow-xl dark:bg-zinc-800">
+          <div className="card-body">
+            <div className="flex gap-3 justify-center items-center">
+              <img src="/assets/icon.svg" alt="" className="w-11 h-11 logo" />
+              <div className="leading-[1.25] dark:text-zinc-200">
+                <p className="font-bold uppercase">
+                  <span className="hidden sm:inline">Praktikum</span> Fisika
+                  Laboratorium
+                </p>
+                <p className="uppercase text-sm sm:text-base">
+                  Departemen Fisika ITS
+                </p>
+              </div>
+            </div>
+            {error ? (
+              <div className="text-center text-red-500 dark:text-red-400 mt-2">
+                Error signing in, {error.message}
+              </div>
+            ) : null}
+            <form
+              onSubmit={handleSignIn}
+              action=""
+              className="flex flex-col gap-2 mt-4"
+            >
+              <input
+                type="number"
+                name="email"
+                placeholder="NRP"
+                className="login"
+                value={credentials.email}
+                onChange={handleChange}
+              />
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                className="login"
+                value={credentials.password}
+                onChange={handleChange}
+              />
+              {fetching ? (
+                <button className="btn mt-4" disabled>
+                  <ImSpinner2 className="animate-spin" />
                 </button>
-              </p>
-            </>
-          )}
-          {view === 'sign-up' && (
-            <>
-              <button className="bg-green-700 rounded px-4 py-2 text-white mb-6">
-                Sign Up
-              </button>
-              <p className="text-sm text-center">
-                Already have an account?
-                <button
-                  className="ml-1 underline"
-                  onClick={() => setView('sign-in')}
-                >
-                  Sign In Now
+              ) : (
+                <button className="btn mt-4" type="submit">
+                  Masuk
                 </button>
-              </p>
-            </>
-          )}
-        </form>
-      )}
-    </div>
-  )
+              )}
+            </form>
+          </div>
+        </div>
+        {!dark ? (
+          <button
+            onClick={toogleDark}
+            className="text-slate-800 dark:text-zinc-300"
+          >
+            For Night Owl 🦉
+          </button>
+        ) : (
+          <button
+            onClick={toogleDark}
+            className="text-slate-800 dark:text-zinc-300"
+          >
+            For Day Eagle 🦅️
+          </button>
+        )}
+      </div>
+    </>
+  );
 }
