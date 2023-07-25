@@ -1,7 +1,12 @@
 import ThemeProvider from "@/components/providers/theme";
+import { Inter } from 'next/font/google'
 import "./globals.css";
-
 import { Metadata } from "next";
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: "Praktikum Fisika Laboratorium",
@@ -11,13 +16,9 @@ export const metadata: Metadata = {
     title: "Praktikum Fisika Laboratorium, Fisika ITS",
     description: "Laman Web Penjadwalan dan Penilaian Praktikum Fisika Laboratorium Departemen Fisika Institut Teknologi Sepuluh Nopember",
     siteName: "Praktikum Fisika Laboratorium",
-    images: [{
-      url: "/assets/og.png",
-    }],
   },
   description:
     "Laman Web Penjadwalan dan Penilaian Praktikum Fisika Laboratorium Departemen Fisika Institut Teknologi Sepuluh Nopember",
-  icons: "/assets/favicon.ico", 
 };
 
 export default function RootLayout({
@@ -26,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="id" className={inter.className}>
       <body>
         <main className="min-h-screen">
           <ThemeProvider>{children}</ThemeProvider>

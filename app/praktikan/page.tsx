@@ -19,7 +19,7 @@ export default async function Index() {
     .eq("id", user?.id);
   const roles: any = data?.map((data) => data.praktikum_role).filter(unique);
 
-  if (!roles.find((element: any) => element === "praktikan")) {
+  if (!user || !roles.find((element: any) => element === "praktikan") ) {
     return <Redirect to="/" />
   }
 
