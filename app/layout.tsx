@@ -4,9 +4,20 @@ import "./globals.css";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Memuat...",
+  title: "Praktikum Fisika Laboratorium",
+  openGraph: {
+    type: "website",
+    url: "https://praktikum-fisika.site/",
+    title: "Praktikum Fisika Laboratorium, Fisika ITS",
+    description: "Laman Web Penjadwalan dan Penilaian Praktikum Fisika Laboratorium Departemen Fisika Institut Teknologi Sepuluh Nopember",
+    siteName: "Praktikum Fisika Laboratorium",
+    images: [{
+      url: "/assets/og.png",
+    }],
+  },
   description:
-    "Halaman Loading laman web Praktikum Fisika Laboratorium",
+    "Laman Web Penjadwalan dan Penilaian Praktikum Fisika Laboratorium Departemen Fisika Institut Teknologi Sepuluh Nopember",
+  icons: "/assets/favicon.ico", 
 };
 
 export default function RootLayout({

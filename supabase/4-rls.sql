@@ -25,10 +25,11 @@ create policy "praktikum only can be viewed by logged in users" on praktikum
 -- Setup the user_praktikum_linker table RLS --
 
 alter table user_praktikum_linker enable row level security;
-create policy "User Information viewable by logged in users" on user_praktikum_linker
-  for select to authenticated using (true);
-create policy "Only aslab can update information." on user_praktikum_linker
-  for update using ( praktikum_role = 'aslab');
+create policy "Praktikan only select themself and aslab"
+  on user_praktikum_linker
+  for select using (
+    auth.uid() = id or 'aslab' = praktikum_role
+  );
 
 create policy
   "Aslab can update the kelompok he's on" on user_praktikum_linker for all using (

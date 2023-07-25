@@ -1,38 +1,57 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
-import Link from 'next/link'
-import LogoutButton from '../components/LogoutButton'
+"use client";
 
-export const dynamic = 'force-dynamic'
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { unique } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-export default async function Index() {
-  const supabase = createServerComponentClient({ cookies })
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+export default function Main() {
+  const supabase = createClientComponentClient();
+  const [roles, setRoles] = useState<string[] | null>();
+  const router = useRouter();
+
+  useEffect(() => {
+    async function firstLoad() {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) {
+        router.push("/login");
+        router.refresh();
+      } else {
+        let { data } = await supabase
+          .from("user_praktikum_linker")
+          .select("praktikum_role")
+          .eq("id", session.user.id);
+        let roles = data?.map((data) => data.praktikum_role).filter(unique);
+        setRoles(roles);
+      }
+    }
+    firstLoad();
+  }, []);
+
+  if (roles) {
+      if (
+        roles.find((element) => element === "aslab") &&
+        roles.find((element) => element === "praktikan")
+      ) {
+        router.push(`/aslab`);
+        router.refresh();
+      } else if (roles.find((element) => element === "aslab")) {
+        router.push(`/aslab`);
+        router.refresh();
+      } else if (roles.find((element) => element === "praktikan")) {
+        router.push(`/praktikan`);
+        router.refresh();
+      }
+  }
 
   return (
-    <div className="w-full flex flex-col items-center">
-      <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-        <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm text-foreground">
-          <div>
-            {user ? (
-              <div className="flex items-center gap-4">
-                Hey, {user.email}!
-                <LogoutButton />
-              </div>
-            ) : (
-              <Link
-                href="/login"
-                className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover"
-              >
-                Login
-              </Link>
-            )}
-          </div>
-        </div>
-      </nav>
+    <div className="w-full flex flex-col items-center justify-center min-h-screen bg-zinc-900 text-slate-50">
+      <span className="loading loading-dots loading-lg"></span>
+      <p>Memuat..</p>
     </div>
-  )
+  );
 }

@@ -1,25 +1,28 @@
-'use client'
+"use client";
 
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { useRouter } from 'next/navigation'
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/navigation";
+import { FiLogOut } from "react-icons/fi";
 
 export default function LogoutButton() {
-  const router = useRouter()
+  const router = useRouter();
 
   // Create a Supabase client configured to use cookies
-  const supabase = createClientComponentClient()
+  const supabase = createClientComponentClient();
 
   const signOut = async () => {
-    await supabase.auth.signOut()
-    router.refresh()
-  }
+    await supabase.auth.signOut();
+    router.push("/");
+    router.refresh();
+  };
 
   return (
-    <button
-      className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover"
+    <div
+      className="btn flex items-center justify-center hover:text-zinc-100"
       onClick={signOut}
     >
-      Logout
-    </button>
-  )
+        <FiLogOut className="h-full"/>
+        <p>Keluar</p>
+    </div>
+  );
 }

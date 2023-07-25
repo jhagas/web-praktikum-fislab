@@ -54,48 +54,59 @@ body {
 }
 
 .btn {
-  @apply bg-zinc-700 border-zinc-700 text-zinc-100 hover:bg-zinc-800 !important;
+  @apply bg-zinc-700 border-zinc-700 text-zinc-100 hover:bg-zinc-800;
 }
 .btn-ghost {
-  @apply dark:bg-transparent dark:text-zinc-100 dark:border-0;
+  @apply bg-transparent text-zinc-900 dark:text-zinc-100 border-0 hover:bg-zinc-100 dark:hover:bg-zinc-700;
 }
 
 .logo {
-  @apply dark:bg-slate-50 rounded-md p-1
+  @apply dark:bg-slate-50 rounded-md p-1;
 }
 
 .modal-box {
-  @apply dark:bg-zinc-800 dark:text-zinc-100
+  @apply dark:bg-zinc-800 dark:text-zinc-100;
 }
 
 .infodash {
-  @apply dark:text-zinc-100 text-slate-800
+  @apply dark:text-zinc-100 text-slate-800;
 }
 
 .divider {
-  @apply before:dark:bg-zinc-800 after:dark:bg-zinc-800
+  @apply before:dark:bg-zinc-800 after:dark:bg-zinc-800;
 }
 
 thead > tr > td {
-  @apply bg-slate-100 dark:bg-zinc-800 text-slate-900 dark:text-zinc-50
+  @apply bg-slate-100 dark:bg-zinc-800 text-slate-900 dark:text-zinc-50;
 }
 
 tbody > tr > td {
-  @apply bg-white dark:bg-zinc-900 text-slate-900 dark:text-zinc-50 dark:border-zinc-800
+  @apply bg-white dark:bg-zinc-900 text-slate-900 dark:text-zinc-50 dark:border-zinc-800;
 }
 
 .tablecon {
-  @apply dark:border-zinc-700 border
+  @apply dark:border-zinc-700 border;
 }
 
 .badge-ghost {
-  @apply dark:border-0 dark:text-zinc-50
+  @apply dark:border-0 dark:text-zinc-50;
 }
 
 .modal {
-  @apply dark:bg-zinc-900/70 backdrop-blur-sm
+  @apply dark:bg-zinc-900/70 backdrop-blur-sm;
 }
 
 .file {
   @apply dark:bg-zinc-700 shadow focus:outline-none;
+}
+
+.nav-item {
+  @apply active:!bg-zinc-300 active:!text-zinc-900 dark:active:!bg-zinc-900 dark:active:!text-zinc-200;
+  @apply hover:!bg-zinc-300 hover:!text-zinc-900 dark:hover:!bg-zinc-900 dark:hover:!text-zinc-200;
+}
+
+.select {
+  @apply border bg-transparent border-zinc-200 active:!bg-white active:!text-zinc-900;
+  @apply dark:border-zinc-700 dark:active:!bg-transparent dark:active:!text-zinc-100;
+  @apply dark:border-zinc-700 dark:focus:!bg-zinc-700 dark:focus:!text-zinc-100;
 }

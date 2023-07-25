@@ -6,6 +6,7 @@ create table profiles (
     nrp text unique,
     full_name text,
     contact text,
+    avatar_url text,
     isChanged boolean default false not null
 );
 
@@ -39,3 +40,8 @@ create table
     nilai jsonb,
     PRIMARY KEY (id, kelompok, kode_praktikum)
   );
+
+------------------------------------------------------------
+-- Set up Storage! --
+insert into storage.buckets (id, name)
+  values ('avatars', 'avatars');
