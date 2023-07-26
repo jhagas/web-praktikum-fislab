@@ -127,10 +127,10 @@ export default function PilihanWaktu({
                   <div
                     key={i}
                     onClick={() => setHours(convertTime(data))}
-                    className={`btn btn-sm ${
+                    className={`btn btn-sm dark:hover:!bg-orange-700 ${
                       hours === convertTime(data)
-                        ? "dark:bg-orange-600 dark:hover:bg-orange-500"
-                        : "!btn-outline"
+                        ? "dark:!bg-orange-600"
+                        : "!btn-outline dark:!border-orange-500 dark:!text-zinc-100"
                     }`}
                   >
                     {convertTime(data)}
@@ -140,10 +140,10 @@ export default function PilihanWaktu({
                   <div
                     key={i}
                     onClick={() => setHours(convertTime(data))}
-                    className={`btn btn-sm ${
+                    className={`btn btn-sm dark:hover:!bg-orange-700 ${
                       hours === convertTime(data)
-                        ? "dark:bg-orange-600 dark:hover:bg-orange-500"
-                        : "!btn-outline"
+                        ? "dark:!bg-orange-600"
+                        : "!btn-outline !border-orange-500 dark:!text-zinc-100"
                     }`}
                   >
                     {convertTime(data)}

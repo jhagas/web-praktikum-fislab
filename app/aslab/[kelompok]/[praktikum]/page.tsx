@@ -48,7 +48,7 @@ export default function Main() {
 
       const { data }: { data: Data } = await supabase
         .from("user_praktikum_linker")
-        .select("jadwal")
+        .select("jadwal, kelompok, kode_praktikum")
         .eq("id", user?.id)
         .eq("praktikum_role", "aslab")
         .eq("kelompok", kelompok)

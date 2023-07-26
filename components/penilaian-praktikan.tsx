@@ -106,13 +106,13 @@ export default function PenilaianPraktikan({
           <div className="modal-box max-w-2xl">
             <div>
               <h3 className="font-bold text-lg">{data.profiles.full_name}</h3>
-              <span className="badge badge-ghost badge-sm font-semibold bg-orange-100 dark:bg-orange-900">
+              <span className="badge badge-ghost badge-sm font-semibold bg-orange-200 dark:bg-orange-900">
                 {data.profiles.nrp}
               </span>{" "}
-              <span className="badge badge-ghost font-semibold badge-sm bg-fuchsia-100 dark:bg-fuchsia-900">
+              <span className="badge badge-ghost font-semibold badge-sm bg-fuchsia-200 dark:bg-fuchsia-900">
                 {info?.kelompok}
               </span>{" "}
-              <span className="badge badge-ghost font-semibold badge-sm bg-green-100 dark:bg-green-900">
+              <span className="badge badge-ghost font-semibold badge-sm bg-green-200 dark:bg-green-900">
                 Kode {info?.kode_praktikum}
               </span>
             </div>
@@ -131,10 +131,10 @@ export default function PenilaianPraktikan({
                     <label className="label-text infodash">
                       {desc[data].nama}{" "}
                       <div className="inline whitespace-nowrap">
-                        <span className="badge badge-ghost badge-sm bg-teal-50 dark:bg-teal-800">
+                        <span className="badge badge-ghost badge-sm bg-green-200 dark:bg-teal-800">
                           {desc[data].bobot}
                         </span>{" "}
-                        <span className="badge badge-ghost badge-sm bg-fuchsia-50 dark:bg-fuchsia-800">
+                        <span className="badge badge-ghost badge-sm bg-fuchsia-200 dark:bg-fuchsia-800">
                           {desc[data].min}-{desc[data].max}
                         </span>
                       </div>
