@@ -1,12 +1,13 @@
 import ThemeProvider from "@/components/providers/theme";
-import { Inter } from 'next/font/google'
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-})
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Praktikum Fisika Laboratorium",
@@ -14,7 +15,8 @@ export const metadata: Metadata = {
     type: "website",
     url: "https://fislab-its.site/",
     title: "Praktikum Fisika Laboratorium, Fisika ITS",
-    description: "Laman Web Penjadwalan dan Penilaian Praktikum Fisika Laboratorium Departemen Fisika Institut Teknologi Sepuluh Nopember",
+    description:
+      "Laman Web Penjadwalan dan Penilaian Praktikum Fisika Laboratorium Departemen Fisika Institut Teknologi Sepuluh Nopember",
     siteName: "Praktikum Fisika Laboratorium",
   },
   description:
@@ -31,6 +33,7 @@ export default function RootLayout({
       <body>
         <main className="min-h-screen">
           <ThemeProvider>{children}</ThemeProvider>
+          <Analytics />
         </main>
       </body>
     </html>
