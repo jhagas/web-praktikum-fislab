@@ -18,7 +18,7 @@ export default function TabelAslab({ data }: any) {
             {data.map((data: any, index: number) => {
               return (
                 <tr key={index}>
-                  <td className="font-semibold">
+                  <td className="font-semibold whitespace-nowrap">
                     {data.praktikum.judul}
                     <br />
                     <span className="badge badge-ghost badge-sm font-semibold bg-orange-100 dark:bg-orange-900 text-[0.7rem]">
@@ -28,10 +28,10 @@ export default function TabelAslab({ data }: any) {
                   <td>{data.minggu}</td>
                   <td>
                     {data.jadwal ? (
-                      <>
+                      <div className="whitespace-nowrap">
                         <DateFormatter
                           dateString={data.jadwal + "-0000"}
-                          formatStr="dddd, DD MMMM YYYY"
+                          formatStr="iiii, dd MMMM yyyy"
                         />
                         <br />
                         <span className="badge bg-green-200 dark:bg-green-900 shadow-sm badge-ghost badge-sm font-semibold">
@@ -40,7 +40,7 @@ export default function TabelAslab({ data }: any) {
                             formatStr="HH:mm"
                           />
                         </span>
-                      </>
+                      </div>
                     ) : (
                       "Belum Diatur"
                     )}

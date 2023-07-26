@@ -39,7 +39,7 @@ export default function ThisWeek({ linker }: { linker: any }) {
                     ) : (
                       <DateFormatter
                         dateString={data.jadwal + "-0000"}
-                        formatStr="dddd, DD MMMM [Pukul] HH:mm"
+                        formatStr="iiii, dd MMMM 'Pukul' HH:mm"
                       />
                     )}
                   </p>

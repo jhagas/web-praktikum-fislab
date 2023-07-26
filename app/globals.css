@@ -84,6 +84,14 @@ tbody > tr > td {
   @apply bg-white dark:bg-zinc-900 text-slate-900 dark:text-zinc-50 dark:border-zinc-800;
 }
 
+thead > tr {
+  @apply dark:border-zinc-800;
+}
+
+tbody > tr {
+  @apply dark:border-zinc-800;
+}
+
 .tablecon {
   @apply dark:border-zinc-700 border;
 }

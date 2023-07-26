@@ -30,7 +30,7 @@ export default function TabelPraktikan({
               const penilaian = hitungNilai(data.nilai).toLocaleString(options);
               return (
                 <tr key={index}>
-                  <td className="font-semibold">
+                  <td className="font-semibold whitespace-nowrap">
                     {data.praktikum.judul}
                     <br />
                     <span className="badge badge-ghost badge-sm font-semibold bg-orange-100 dark:bg-orange-900 text-[0.7rem]">
@@ -44,7 +44,7 @@ export default function TabelPraktikan({
                       size={35}
                       name={aslab.data[index].profiles.full_name}
                     />
-                    <div>
+                    <div className="whitespace-nowrap">
                       {aslab.data[index].profiles.full_name}
                       <br />
                       <span className="badge badge-ghost badge-sm bg-blue-100 dark:bg-blue-900 shadow-sm font-semibold">
@@ -54,10 +54,10 @@ export default function TabelPraktikan({
                   </td>
                   <td>
                     {data.jadwal ? (
-                      <>
+                      <div className="whitespace-nowrap">
                         <DateFormatter
                           dateString={data.jadwal + "-0000"}
-                          formatStr="dddd, DD MMMM YYYY"
+                          formatStr="iiii, d MMMM yyyy"
                         />
                         <br />
                         <span className="badge bg-green-200 dark:bg-green-900 shadow-sm badge-ghost badge-sm font-semibold">
@@ -66,7 +66,7 @@ export default function TabelPraktikan({
                             formatStr="HH:mm"
                           />
                         </span>
-                      </>
+                      </div>
                     ) : (
                       "Belum Diatur"
                     )}
@@ -92,8 +92,7 @@ export default function TabelPraktikan({
                               </span>{" "}
                               <span className="badge badge-ghost font-semibold bg-blue-100 dark:bg-blue-900">
                                 {titleCase(data.praktikum.matkul.id)}
-                              </span>
-                              <br></br>
+                              </span>{" "}
                               <span className="badge badge-ghost font-semibold bg-fuchsia-100 dark:bg-fuchsia-900">
                                 Kelompok {data.kelompok}
                               </span>
