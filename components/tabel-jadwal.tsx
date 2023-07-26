@@ -37,7 +37,7 @@ export default function TabelJadwal({ data, awalMinggu }: Params) {
                           {d}
                         </Moment>
                         <br />
-                        <div className="badge badge-ghost bg-primary/20">
+                        <div className="badge badge-ghost bg-primary/20 dark:bg-primary/60">
                           <Moment locale="id" format="HH:mm">
                             {d}
                           </Moment>

@@ -86,7 +86,7 @@ export default function PenilaianPraktikan({
         <p className="text-sm">{data.profiles.nrp}</p>
         <div className="divider opacity-60 mx-5 my-2 before:dark:bg-zinc-700 after:dark:bg-zinc-700"></div>
         <div className="stat text-center py-1">
-          <div className="stat-title">Nilai Akhir</div>
+          <div className="stat-title dark:text-zinc-300">Nilai Akhir</div>
           <div className="stat-value">
             {hitungNilai(data.nilai).toLocaleString(options)}
           </div>
