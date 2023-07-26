@@ -14,8 +14,10 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Dashboard Praktikan | Praktikum Fisika Laboratorium",
   description:
-    "Dashboard Praktikan Pada Laman  Web Penjadwalan dan Penilaian Praktikum Fisika Laboratorium Departemen Fisika Institut Teknologi Sepuluh Nopember",
+    "Dashboard Praktikan Pada Laman Web Penjadwalan dan Penilaian Praktikum Fisika Laboratorium Departemen Fisika Institut Teknologi Sepuluh Nopember",
 };
+
+export const dynamic = 'force-dynamic'
 
 export default async function Index() {
   const supabase = createServerComponentClient({ cookies });

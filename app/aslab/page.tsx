@@ -13,8 +13,10 @@ import TabelAslab from "@/components/tabel-aslab";
 export const metadata: Metadata = {
   title: "Dashboard Asisten | Praktikum Fisika Laboratorium",
   description:
-    "Dashboard Asisten Pada Laman  Web Penjadwalan dan Penilaian Praktikum Fisika Laboratorium Departemen Fisika Institut Teknologi Sepuluh Nopember",
+    "Dashboard Asisten Pada Laman Web Penjadwalan dan Penilaian Praktikum Fisika Laboratorium Departemen Fisika Institut Teknologi Sepuluh Nopember",
 };
+
+export const dynamic = 'force-dynamic'
 
 export default async function Index() {
   const supabase = createServerComponentClient({ cookies });
