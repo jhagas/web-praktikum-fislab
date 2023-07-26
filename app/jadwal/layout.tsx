@@ -12,6 +12,8 @@ export const metadata: Metadata = {
     "Halaman Untuk melihat jadwal yang terisi pada laman web Praktikum Fisika Laboratorium",
 };
 
+export const dynamic = 'force-dynamic'
+
 export default async function Layout({
   children,
 }: {
