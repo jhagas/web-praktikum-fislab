@@ -58,7 +58,7 @@ export function mingguKuliah(date? : any) {
 }
 
 export function rangeMinggu(week: number) {
-  const date = new Date("02/06/2023");
+  const date = new Date(mulaiKuliah);
   const today = new Date(date.setDate(date.getDate() + 7 * (week - 1)));
 
   const awalMinggu = new Date(

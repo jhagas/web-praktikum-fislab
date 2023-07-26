@@ -73,6 +73,11 @@ export default function Dropdown({ data, nama, nrp, roles }: params) {
           </Link>
         </li>
         <li>
+          <Link href="/about-admin" className="nav-item">
+            Tentang Admin
+          </Link>
+        </li>
+        <li>
           <div className="flex justify-between nav-item" onClick={toogleDark}>
             <label>Mode Gelap</label>
             <input
