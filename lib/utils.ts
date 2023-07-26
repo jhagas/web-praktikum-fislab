@@ -1,4 +1,4 @@
-export const desc = {
+export const desc : any = {
   prelab: { nama: "Pre-Lab dan In-Lab", min: 1, max: 10, bobot: "45%" },
   abstrak: { nama: "Abstrak", min: 1, max: 10, bobot: "5%" },
   pendahuluan_metodologi: {
@@ -40,7 +40,7 @@ export function titleCase(str: any) {
 
 const mulaiKuliah = "02/06/2023";
 
-export function mingguKuliah(date : any) {
+export function mingguKuliah(date? : any) {
   const awal = new Date(mulaiKuliah) as any;
   let sekarang : any;
   if (!date) {

@@ -1,8 +1,10 @@
-import { ChangeEventHandler, LegacyRef, useEffect, useRef } from "react";
+"use client"
+
+import { ChangeEventHandler, useEffect, useRef } from "react";
 import { useState } from "react";
 import { useCallback } from "react";
 import Cropper from "react-easy-crop";
-import getCroppedImg from "./cropImage";
+import getCroppedImg from "./crop-image";
 import FileResizer from "react-image-file-resizer";
 import {
   Session,

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title: "Praktikum Fisika Laboratorium",
   openGraph: {
     type: "website",
-    url: "https://praktikum-fisika.site/",
+    url: "https://fislab-its.site/",
     title: "Praktikum Fisika Laboratorium, Fisika ITS",
     description: "Laman Web Penjadwalan dan Penilaian Praktikum Fisika Laboratorium Departemen Fisika Institut Teknologi Sepuluh Nopember",
     siteName: "Praktikum Fisika Laboratorium",

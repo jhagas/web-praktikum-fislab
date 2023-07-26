@@ -1,19 +1,10 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import PasswordStrengthBar from "react-password-strength-bar";
-import Loading from "./loading";
-import { titleCase } from "@/lib/utils";
-import { useRef } from "react";
-import AvatarComp from "./avatar";
-import AvatarSet from "./avatarSet";
-import { AvatarChange } from "./avatarCrop";
-import { useDark } from "@/lib/dark";
+import { AvatarChange } from "./avatar-crop";
 import { Session } from "@supabase/supabase-js";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
-import LogoutButton from "./LogoutButton";
-import { useRouter } from "next/navigation";
+import Password from "./password";
+import { cookies } from "next/headers";
+import Dropdown from "./dropdown-nav";
 
 type params = {
   user: Session["user"] | null;
@@ -22,55 +13,14 @@ type params = {
   roles: string[];
 };
 
-export default function Navbar({ user, nama, nrp, roles }: params) {
-  const [dark, toogleDark] = useDark();
-  const [pathname, setPathname] = useState<string>()
+export default async function Navbar({ user, nama, nrp, roles }: params) {
+  const client = createServerComponentClient({ cookies });
 
-  useEffect(() => {
-    const pathname = window.location.pathname.split("/")[1];
-    setPathname(pathname);
-  })
-
-  const router = useRouter();
-
-  const [password, setPassword] = useState("");
-  const [clicked, setClicked] = useState(false);
-  const dropdown: any = useRef(null);
-
-  const client = createClientComponentClient();
-
-  async function handleChangePassword(event: { preventDefault: () => void }) {
-    event.preventDefault();
-    await client.auth.updateUser({ password: password });
-    // update
-    await client
-      .from("profiles")
-      .update({ ischanged: true })
-      .eq("id", user?.id);
-    setPassword("");
-  }
-
-  const [data, setData] = useState<
-    { ischanged: any; avatar_url: any }[] | null
-  >();
-
-  useEffect(() => {
-    async function first() {
-      let { data } = await client
-        .from("profiles")
-        .select("ischanged, avatar_url")
-        .eq("id", user?.id);
-
-      setData(data);
-    }
-    first()
-  }, []);
-
-  if (!data) return <Loading />;
-
-  function handleFocus() {
-    if (dropdown.current && clicked) dropdown.current.blur(); // removing focus
-  }
+  let { data } = await client
+    .from("profiles")
+    .select("ischanged, avatar_url")
+    .eq("id", user?.id)
+    .single();
 
   return (
     <>
@@ -87,147 +37,16 @@ export default function Navbar({ user, nama, nrp, roles }: params) {
           </Link>
         </div>
         <div className="navbar-end">
-          <div
-            className="dropdown"
-            onClick={() => {
-              handleFocus();
-              setClicked(!clicked);
-            }}
-            onBlur={() => setClicked(false)}
-          >
-            <label
-              tabIndex={0}
-              className="btn btn-ghost flex gap-3"
-              ref={dropdown}
-            >
-              <div className="text-right hidden lg:block">
-                <p>{nama}</p>
-                <p className="font-normal">{nrp}</p>
-              </div>
-              <AvatarComp url={data[0].avatar_url} size={32} name={nama} />
-            </label>
-            <ul
-              tabIndex={0}
-              className="menu dark:bg-zinc-800 dark:text-zinc-50 menu-compact dropdown-content top-16 right-2 p-2 shadow bg-base-100 rounded-box w-52 gap-2 absolute"
-            >
-              <li>
-                <div className="flex flex-col gap-1 cursor-default nav-item">
-                  <AvatarSet url={data[0].avatar_url} size={100} name={nama} />
-                  <p className="font-bold text-center">{nama}</p>
-                  <p className="font-normal">{nrp}</p>
-                </div>
-              </li>
-              {roles.length > 1 ? (
-                <li>
-                  <select
-                    className="select infodash"
-                    value={pathname}
-                    onChange={(e) => {
-                      router.push(`/${e.target.value}`);
-                    }}
-                  >
-                    {roles.map((role, index) => (
-                      <option value={role} key={index}>
-                        {titleCase(role)}
-                      </option>
-                    ))}
-                  </select>
-                </li>
-              ) : null}
-              <li>
-                <label
-                  htmlFor="ppChange"
-                  className="nav-item"
-                >
-                  Ubah Foto Profil
-                </label>
-              </li>
-              <li>
-                <label
-                  htmlFor="passwordChange"
-                  className="nav-item"
-                >
-                  Ubah Password
-                </label>
-              </li>
-              <li>
-                <Link
-                  href="/jadwal"
-                  className="nav-item"
-                >
-                  Jadwal Keseluruhan
-                </Link>
-              </li>
-              <li>
-                <div
-                  className="flex justify-between nav-item"
-                  onClick={toogleDark}
-                >
-                  <label>Mode Gelap</label>
-                  <input
-                    type="checkbox"
-                    className="toggle"
-                    checked={dark}
-                    onChange={toogleDark}
-                    onClick={toogleDark}
-                  />
-                </div>
-              </li>
-              <li>
-                <LogoutButton />
-              </li>
-            </ul>
-          </div>
+          <Dropdown data={data} nama={nama} nrp={nrp} roles={roles} />
         </div>
       </div>
       <input
         type="checkbox"
         id="passwordChange"
         className="modal-toggle"
-        defaultChecked={!data[0].ischanged}
+        defaultChecked={!data?.ischanged}
       />
-      <div className="modal">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg mb-4">Ubah Kata Sandi</h3>
-          <form className="mt-4" onSubmit={handleChangePassword}>
-            <input
-              type="text"
-              placeholder="Kata Sandi Baru"
-              className="login mb-3"
-              value={password}
-              minLength={8}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <PasswordStrengthBar password={password} />
-            <div className="flex gap-2 justify-end mt-3">
-              {password.length < 8 ? (
-                <label
-                  htmlFor="passwordChange"
-                  className="btn"
-                  onClick={() => setPassword("")}
-                >
-                  Batal
-                </label>
-              ) : (
-                <>
-                  <label
-                    htmlFor="passwordChange"
-                    className="btn"
-                    onClick={() => setPassword("")}
-                  >
-                    Batal
-                  </label>
-                  <button type="submit">
-                    <label htmlFor="passwordChange" className="btn">
-                      Selesai
-                    </label>
-                  </button>
-                </>
-              )}
-            </div>
-          </form>
-        </div>
-      </div>
+      <Password user={user} />
       <AvatarChange />
     </>
   );
