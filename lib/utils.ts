@@ -38,8 +38,7 @@ export function titleCase(str: any) {
   return str.join(" ");
 }
 
-// const mulaiKuliah = "08/28/2023";
-const mulaiKuliah = "07/10/2023";
+const mulaiKuliah = "08/28/2023";
 
 export function mingguKuliah(date? : any) {
   const awal = new Date(mulaiKuliah) as any;
