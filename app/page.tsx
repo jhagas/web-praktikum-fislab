@@ -3,6 +3,8 @@ import { unique } from "@/lib/utils";
 import { cookies } from "next/headers";
 import Redirect from "@/components/redirect";
 
+export const dynamic = 'force-dynamic'
+
 export default async function Main() {
   let roles;
   const supabase = createServerComponentClient({ cookies });
