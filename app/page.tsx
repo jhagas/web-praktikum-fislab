@@ -1,51 +1,37 @@
-"use client";
-
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { unique } from "@/lib/utils";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { cookies } from "next/headers";
+import Redirect from "@/components/redirect";
 
+export default async function Main() {
+  let roles;
+  const supabase = createServerComponentClient({ cookies });
 
-export default function Main() {
-  const supabase = createClientComponentClient();
-  const [roles, setRoles] = useState<string[] | null>();
-  const router = useRouter();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
-  useEffect(() => {
-    async function firstLoad() {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      if (!session) {
-        router.push("/login");
-        router.refresh();
-      } else {
-        let { data } = await supabase
-          .from("user_praktikum_linker")
-          .select("praktikum_role")
-          .eq("id", session.user.id);
-        let roles = data?.map((data) => data.praktikum_role).filter(unique);
-        setRoles(roles);
-      }
-    }
-    firstLoad();
-  }, []);
+  if (!session) {
+    return <Redirect to="/login" />;
+  } else {
+    let { data } = await supabase
+      .from("user_praktikum_linker")
+      .select("praktikum_role")
+      .eq("id", session.user.id);
+    roles = data?.map((data) => data.praktikum_role).filter(unique);
+  }
 
   if (roles) {
-      if (
-        roles.find((element) => element === "aslab") &&
-        roles.find((element) => element === "praktikan")
-      ) {
-        router.push(`/aslab`);
-        router.refresh();
-      } else if (roles.find((element) => element === "aslab")) {
-        router.push(`/aslab`);
-        router.refresh();
-      } else if (roles.find((element) => element === "praktikan")) {
-        router.push(`/praktikan`);
-        router.refresh();
-      }
+    if (
+      roles.find((element) => element === "aslab") &&
+      roles.find((element) => element === "praktikan")
+    ) {
+      return <Redirect to="/aslab" />;
+    } else if (roles.find((element) => element === "aslab")) {
+      return <Redirect to="/aslab" />;
+    } else if (roles.find((element) => element === "praktikan")) {
+      <Redirect to="/praktikan" />;
+    }
   }
 
   return (

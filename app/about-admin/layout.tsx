@@ -1,7 +1,4 @@
-import Credit from "@/components/credit";
-import Navbar from "@/components/navbar";
 import Redirect from "@/components/redirect";
-import { unique } from "@/lib/utils";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
