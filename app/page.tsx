@@ -32,7 +32,7 @@ export default async function Main() {
     } else if (roles.find((element) => element === "aslab")) {
       return <Redirect to="/aslab" />;
     } else if (roles.find((element) => element === "praktikan")) {
-      <Redirect to="/praktikan" />;
+      return <Redirect to="/praktikan" />;
     }
   }
 
