@@ -1,4 +1,4 @@
-function changeTimeZone(date: Date | string, timeZone: string) {
+export function changeTimeZone(date: Date | string, timeZone: string) {
   if (typeof date === "string") {
     return new Date(
       new Date(date).toLocaleString("en-US", {

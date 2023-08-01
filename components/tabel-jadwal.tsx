@@ -1,6 +1,5 @@
-import Moment from "react-moment";
-import { inRangeMinggu } from "@/lib/utils";
-import "moment/locale/id";
+import { changeTimeZone, inRangeMinggu } from "@/lib/utils";
+import DateFormatter from "./date-formatter";
 
 type Params = {
   data: {
@@ -11,6 +10,7 @@ type Params = {
 
 export default function TabelJadwal({ data, awalMinggu }: Params) {
   const rangePekan = inRangeMinggu(awalMinggu);
+
   return (
     <div>
       <div className="rounded-2xl overflow-clip shadow-md mt-8 md:mx-3 tablecon">
@@ -27,20 +27,25 @@ export default function TabelJadwal({ data, awalMinggu }: Params) {
                 {rangePekan.map((d, i) => {
                   const inTime = data.filter(
                     (time) =>
-                      new Date(time.jadwal + "-0000").getTime() === d.getTime()
+                      changeTimeZone(
+                        new Date(time.jadwal + "-0000"),
+                        "Asia/Jakarta"
+                      ).getTime() === d.getTime()
                   );
 
                   return (
                     <tr key={i}>
                       <td className="whitespace-nowrap">
-                        <Moment locale="id" format="dddd, DD MMMM YYYY">
-                          {d}
-                        </Moment>
+                        <DateFormatter
+                          dateString={d.toISOString()}
+                          formatStr="iiii, dd MMMM yyyy"
+                        />
                         <br />
                         <div className="badge badge-ghost bg-primary/20 dark:bg-primary/60">
-                          <Moment locale="id" format="HH:mm">
-                            {d}
-                          </Moment>
+                          <DateFormatter
+                            dateString={d.toISOString()}
+                            formatStr="HH:mm"
+                          />
                         </div>
                       </td>
                       <td>

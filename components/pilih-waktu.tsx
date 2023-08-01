@@ -2,14 +2,14 @@
 
 import Datetime from "react-datetime";
 import "./react-datetime.css";
-import moment from "moment";
-import "moment/locale/id";
 import { Dispatch, SetStateAction, useState } from "react";
-import { convertTime, saturday, weekdays } from "@/lib/utils";
+import { changeTimeZone, convertTime, saturday, weekdays } from "@/lib/utils";
 import Loading from "./loading";
 import { useEffect } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import Moment from "react-moment";
+import DateFormatter from "./date-formatter";
+import { formatInTimeZone } from "date-fns-tz";
+import { subDays } from "date-fns";
 
 type Params = {
   kelompok: string;
@@ -36,11 +36,13 @@ export default function PilihanWaktu({
 }: Params) {
   const supabase = createClientComponentClient();
 
-  const currentDate = data?.jadwal ? moment(data?.jadwal + "-0000") : moment();
+  const currentDate = data?.jadwal
+    ? changeTimeZone(new Date(data?.jadwal + "-0000"), "Asia/Jakarta")
+    : changeTimeZone(new Date(), "Asia/Jakarta");
 
   const timeSelected = data?.jadwal
-    ? moment(data?.jadwal + "-0000").format("HH:mm")
-    : null;
+    ? formatInTimeZone(data?.jadwal + "-0000", "Asia/Jakarta", "HH:mm")
+    : "23:00";
 
   const [selected, setSelected] = useState(currentDate);
   const [hours, setHours] = useState(timeSelected);
@@ -54,8 +56,15 @@ export default function PilihanWaktu({
     getRestricted();
   }, [data, supabase]);
 
-  const send = moment(
-    selected.format("YYYY-MM-DDT" + hours + "[:00]")
+  const send = changeTimeZone(
+    new Date(
+      formatInTimeZone(
+        selected,
+        "Asia/Jakarta",
+        "yyyy-MM-dd'T'" + hours + "':00'"
+      )
+    ),
+    "Asia/Jakarta"
   ).toISOString();
 
   async function onSetJadwal() {
@@ -78,8 +87,8 @@ export default function PilihanWaktu({
     trigger((state) => !state);
   }
 
-  const yesterday = moment().subtract(1, "day");
-  const end = moment("2023-12-03");
+  const yesterday = subDays(changeTimeZone(new Date(), "Asia/Jakarta"), 1);
+  const end = changeTimeZone(new Date("2023-12-03"), "Asia/Jakarta");
   const valid = function (current: any) {
     return (
       current.day() !== 0 && current.isAfter(yesterday) && current.isBefore(end)
@@ -93,14 +102,11 @@ export default function PilihanWaktu({
       {data?.jadwal ? (
         <>
           <p className="text-center font-semibold text-xl">Jadwal</p>
-          <Moment
-            local
-            locale="id"
-            format="dddd, DD MMMM YYYY [Pukul] HH:mm"
-            className="text-center text-sm"
-          >
-            {data?.jadwal + "-0000"}
-          </Moment>
+          <DateFormatter
+            dateString={data?.jadwal + "-0000"}
+            formatStr="iiii, dd MMMM yyyy 'Pukul' HH:mm"
+            className="text-sm text-center"
+          />
         </>
       ) : (
         <p className="text-center font-semibold text-xl">Jadwal Belum Diatur</p>
@@ -118,11 +124,11 @@ export default function PilihanWaktu({
               isValidDate={valid}
               timeFormat={false}
               value={selected}
-              onChange={(e: any) => setSelected(e)}
+              onChange={(e: any) => setSelected(e._d)}
             />
           </div>
           <div className="flex gap-3 justify-center mt-3">
-            {selected.day() === 6
+            {selected.getDay() === 6
               ? saturday.map((data, i) => (
                   <div
                     key={i}
@@ -151,7 +157,12 @@ export default function PilihanWaktu({
                 ))}
           </div>
           {restrict
-            .map((data: any) => moment(data + "-0000").toISOString())
+            .map((data: any) =>
+              changeTimeZone(
+                new Date(data + "-0000"),
+                "Asia/Jakarta"
+              ).toISOString()
+            )
             .find((d: any) => d === send) ? (
             <>
               <p className="text-center text-red-500 mt-2">

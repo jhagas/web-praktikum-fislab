@@ -1,23 +1,16 @@
-"use client";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
+import Navbar from "@/components/navbar";
+import { titleCase, unique } from "@/lib/utils";
+import Redirect from "@/components/redirect";
+import { Metadata } from "next";
+import Credit from "@/components/credit";
+import Main from "./component";
 
-import { sortStringArray } from "@/lib/utils";
-import PilihanWaktu from "@/components/pilih-waktu";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import PenilaianPraktikan from "@/components/penilaian-praktikan";
-
-type Praktikan = {
-  id: any;
-  kelompok: any;
-  kode_praktikum: any;
-  nilai: any;
-  profiles: {
-    full_name: any;
-    nrp: any;
-    avatar_url: any;
-  };
-}[] | null;
+type Props = {
+  params: { kelompok: string; praktikum: string };
+  children: React.ReactNode;
+};
 
 type Data = {
   jadwal: any;
@@ -29,79 +22,77 @@ type Data = {
   };
 } | null;
 
-export default function Main() {
-  const pathname = usePathname();
-  const kelompok = pathname.split("/")[2];
-  const praktikum = pathname.split("/")[3];
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  // read route params
+  const kelompok = params.kelompok;
+  const praktikum = params.praktikum;
 
-  const [data, setData] = useState<Data>(null);
-  const [praktikan, setPraktikan] = useState<Praktikan>();
-  const [trigger, setTrigger] = useState(false);
-  const [triggerNilai, setTriggerNilai] = useState(false);
-  const supabase = createClientComponentClient();
+  return {
+    title: `Kelompok ${kelompok} Praktikum ${praktikum} | Fisika Laboratorium`,
+    description:
+      "Dashboard Penjadwalan dan Penilaian Kelompok Pada Laman Web Praktikum Fisika Laboratorium Departemen Fisika Institut Teknologi Sepuluh Nopember",
+  };
+}
 
-  useEffect(() => {
-    async function fetchData() {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+export const dynamic = "force-dynamic";
 
-      const { data }: { data: Data } = await supabase
-        .from("user_praktikum_linker")
-        .select("jadwal, kelompok, kode_praktikum")
-        .eq("id", user?.id)
-        .eq("praktikum_role", "aslab")
-        .eq("kelompok", kelompok)
-        .eq("kode_praktikum", praktikum)
-        .single();
-      setData(data);
-    }
-    fetchData();
-  }, [trigger]);
+export default async function Index({ params, children }: Props) {
+  const supabase = createServerComponentClient({ cookies });
+  const kelompok = params.kelompok;
+  const praktikum = params.praktikum;
 
-  useEffect(() => {
-    async function fetchData() {
-      const { data }: any = await supabase
-        .from("user_praktikum_linker")
-        .select(
-          "id, kelompok, kode_praktikum, nilai, profiles(full_name, nrp, avatar_url)"
-        )
-        .order("nrp", { foreignTable: "profiles", ascending: false })
-        .eq("praktikum_role", "praktikan")
-        .eq("kelompok", kelompok)
-        .eq("kode_praktikum", praktikum);
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-      setPraktikan(data);
-    }
-    fetchData();
-  }, [triggerNilai]);
+  const roleFetch = await supabase
+    .from("user_praktikum_linker")
+    .select("praktikum_role")
+    .eq("id", user?.id);
+  const roles: any = roleFetch.data
+    ?.map((data) => data.praktikum_role)
+    .filter(unique);
 
-  praktikan?.sort(sortStringArray);
+  const { data }: { data: Data } = await supabase
+    .from("user_praktikum_linker")
+    .select("kelompok, kode_praktikum, praktikum(judul, matkul)")
+    .eq("id", user?.id)
+    .eq("praktikum_role", "aslab")
+    .eq("kelompok", kelompok)
+    .eq("kode_praktikum", praktikum)
+    .single();
+
+  if (!user || !roles.find((element: any) => element === "aslab")) {
+    return <Redirect to="/" />;
+  }
+  if (!data) return <Redirect to="/404" />;
 
   return (
-    <>
-      <PilihanWaktu
-        kelompok={kelompok}
-        praktikum={praktikum}
-        data={data}
-        trigger={setTrigger}
+    <div className="min-h-screen dark:bg-zinc-900">
+      <Navbar
+        nama={user?.user_metadata.full_name}
+        nrp={user?.user_metadata.nrp}
+        user={user}
+        roles={roles}
       />
-      <div className="divider pt-6 pb-4 md:px-10 font-bold text-slate-900 opacity-80 infodash">
-        PENILAIAN PRAKTIKUM
+      <div className="px-3 py-6">
+        <h1 className="font-bold text-2xl text-center infodash">
+          {data?.praktikum.judul}
+        </h1>
+        <div className="flex gap-1 justify-center items-center mt-2 flex-wrap">
+          <span className="badge badge-ghost font-semibold badge-sm bg-green-100 dark:bg-green-900">
+            Kode {data?.kode_praktikum}
+          </span>{" "}
+          <span className="badge badge-ghost font-semibold badge-sm bg-blue-100 dark:bg-blue-900">
+            Mata Kuliah {titleCase(data?.praktikum.matkul)}
+          </span>
+          <span className="badge badge-ghost font-semibold badge-sm bg-fuchsia-100 dark:bg-fuchsia-900">
+            Kelompok {data?.kelompok}
+          </span>
+        </div>
+        <Main />
       </div>
-      <div className="flex gap-4 mt-7 flex-wrap justify-center items-center">
-        {praktikan?.map((datas, index) => (
-          <PenilaianPraktikan
-            key={index}
-            index={index}
-            data={datas}
-            info={data}
-            reexecute={() => {
-              setTriggerNilai((state) => !state);
-            }}
-          />
-        ))}
-      </div>
-    </>
+      <Credit />
+    </div>
   );
 }
