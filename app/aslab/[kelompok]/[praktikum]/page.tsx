@@ -9,7 +9,6 @@ import Main from "./component";
 
 type Props = {
   params: { kelompok: string; praktikum: string };
-  children: React.ReactNode;
 };
 
 type Data = {
@@ -36,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export const dynamic = "force-dynamic";
 
-export default async function Index({ params, children }: Props) {
+export default async function Index({ params }: Props) {
   const supabase = createServerComponentClient({ cookies });
   const kelompok = params.kelompok;
   const praktikum = params.praktikum;
