@@ -40,7 +40,7 @@ export default async function Jadwal({
 
   return (
     <>
-      <ListMinggu state={minggu} minggu={minggu} />
+      <ListMinggu state={selected} minggu={minggu} />
       <TabelJadwal data={data} awalMinggu={awalMinggu} />
     </>
   );
