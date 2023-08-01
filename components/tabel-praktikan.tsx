@@ -104,13 +104,13 @@ export default function TabelPraktikan({
                                     <tr key={i}>
                                       <td>
                                         <span className="badge badge-ghost badge-sm bg-yellow-50 dark:bg-yellow-800">
-                                          {desc[d].bobot}
+                                          {desc[d as keyof typeof desc].bobot}
                                         </span>{" "}
                                         <span className="badge badge-ghost badge-sm bg-orange-50 dark:bg-orange-900">
-                                          {desc[d].min}-{desc[d].max}
+                                          {desc[d as keyof typeof desc].min}-{desc[d as keyof typeof desc].max}
                                         </span>{" "}
                                       </td>
-                                      <td>{desc[d].nama}</td>
+                                      <td>{desc[d as keyof typeof desc].nama}</td>
                                       <td>{data.nilai[d]}</td>
                                     </tr>
                                   ))}

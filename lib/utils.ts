@@ -1,4 +1,20 @@
-export const desc : any = {
+function changeTimeZone(date: Date | string, timeZone: string) {
+  if (typeof date === "string") {
+    return new Date(
+      new Date(date).toLocaleString("en-US", {
+        timeZone,
+      })
+    );
+  }
+
+  return new Date(
+    date.toLocaleString("en-US", {
+      timeZone,
+    })
+  );
+}
+
+export const desc = {
   prelab: { nama: "Pre-Lab dan In-Lab", min: 1, max: 10, bobot: "45%" },
   abstrak: { nama: "Abstrak", min: 1, max: 10, bobot: "5%" },
   pendahuluan_metodologi: {
@@ -30,24 +46,20 @@ export function unique(value: any, index: any, self: any) {
   return self.indexOf(value) === index;
 }
 
-export function titleCase(str: any) {
-  str = str.toLowerCase().split(" ");
-  for (var i = 0; i < str.length; i++) {
-    str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+export function titleCase(str: string) {
+  let splitted = str.toLowerCase().split(" ");
+  for (var i = 0; i < splitted.length; i++) {
+    splitted[i] = splitted[i].charAt(0).toUpperCase() + splitted[i].slice(1);
   }
-  return str.join(" ");
+  return splitted.join(" ");
 }
 
 const mulaiKuliah = "08/28/2023";
 
-export function mingguKuliah(date? : any) {
-  const awal = new Date(mulaiKuliah) as any;
-  let sekarang : any;
-  if (!date) {
-    sekarang = new Date();
-  } else {
-    sekarang = new Date(date);
-  }
+export function mingguKuliah() {
+  const awal = changeTimeZone(new Date(mulaiKuliah), "Asia/Jakarta").getTime();
+  const sekarang = changeTimeZone(new Date(), "Asia/Jakarta").getTime();
+
   const minggu = Math.floor((sekarang - awal) / 3600000 / 24 / 7) + 1;
 
   const mulai = minggu < 0 ? false : true;
@@ -57,14 +69,19 @@ export function mingguKuliah(date? : any) {
 }
 
 export function rangeMinggu(week: number) {
-  const date = new Date(mulaiKuliah);
-  const today = new Date(date.setDate(date.getDate() + 7 * (week - 1)));
-
-  const awalMinggu = new Date(
-    today.setDate(today.getDate() - today.getDay() + 1)
+  const date = changeTimeZone(new Date(mulaiKuliah), "Asia/Jakarta");
+  const today = changeTimeZone(
+    new Date(date.setDate(date.getDate() + 7 * (week - 1))),
+    "Asia/Jakarta"
   );
-  const akhirMinggu = new Date(
-    today.setDate(today.getDate() - today.getDay() + 7)
+
+  const awalMinggu = changeTimeZone(
+    new Date(today.setDate(today.getDate() - today.getDay() + 1)),
+    "Asia/Jakarta"
+  );
+  const akhirMinggu = changeTimeZone(
+    new Date(today.setDate(today.getDate() - today.getDay() + 7)),
+    "Asia/Jakarta"
   );
 
   return { awalMinggu, akhirMinggu };
@@ -93,29 +110,29 @@ export function inRangeMinggu(a: Date) {
   const limit = 6 - (a.getDay() - 1);
 
   for (let i = 0; i < limit; i++) {
-    const awal = new Date(a);
+    const awal = changeTimeZone(new Date(a), "Asia/Jakarta");
     awal.setDate(awal.getDate() + i);
 
-    if ((limit === 7) && (i === 0)) {
+    if (limit === 7 && i === 0) {
       continue;
     }
 
     if (i < limit - 1) {
       for (let j = 0; j < weekdays.length; j++) {
-        const temp2 = new Date(awal);
+        const temp2 = changeTimeZone(new Date(awal), "Asia/Jakarta");
         temp2.setHours(temp2.getHours() + weekdays[j]);
         temp2.setMinutes((weekdays[j] % 1) * 60);
 
-        const timer = new Date(temp2);
+        const timer = changeTimeZone(new Date(temp2), "Asia/Jakarta");
         array.push(timer);
       }
     } else {
       for (let j = 0; j < saturday.length; j++) {
-        const temp3 = new Date(awal);
+        const temp3 = changeTimeZone(new Date(awal), "Asia/Jakarta");
         temp3.setHours(temp3.getHours() + saturday[j]);
         temp3.setMinutes((saturday[j] % 1) * 60);
 
-        const timer = new Date(temp3);
+        const timer = changeTimeZone(new Date(temp3), "Asia/Jakarta");
         array.push(timer);
       }
     }
@@ -123,7 +140,7 @@ export function inRangeMinggu(a: Date) {
   return array;
 }
 
-export function sortStringArray(a: any, b: any){
+export function sortStringArray(a: Praktikan, b: Praktikan) {
   let fa = a.profiles.nrp.toLowerCase(),
     fb = b.profiles.nrp.toLowerCase();
 

@@ -45,9 +45,9 @@ export default function PenilaianPraktikan({
     const aman = Object.keys(nilai)
       .map(
         (data) =>
-          (nilai[data] < parseInt(desc[data].min) ||
-            nilai[data] > parseInt(desc[data].max)) &&
-          nilai[data] !== 0
+          (nilai[data] < desc[data as keyof typeof desc].min ||
+            nilai[data] > desc[data as keyof typeof desc].max) &&
+          nilai[data as keyof typeof desc] !== 0
       )
       .find((d) => d === true);
 
@@ -123,26 +123,26 @@ export default function PenilaianPraktikan({
             <div className="flex gap-2 mt-4 flex-wrap justify-center">
               {Object.keys(nilai).map((data, index) => {
                 const aman =
-                  (nilai[data] < parseInt(desc[data].min) ||
-                    nilai[data] > parseInt(desc[data].max)) &&
-                  nilai[data] !== 0;
+                  (nilai[data] < desc[data as keyof typeof desc].min ||
+                    nilai[data] > desc[data as keyof typeof desc].max) &&
+                  nilai[data as keyof typeof desc] !== 0;
                 return (
                   <div key={index} className="min-w-min max-w-[17rem] w-full">
                     <label className="label-text infodash">
-                      {desc[data].nama}{" "}
+                      {desc[data as keyof typeof desc].nama}{" "}
                       <div className="inline whitespace-nowrap">
                         <span className="badge badge-ghost badge-sm bg-green-200 dark:bg-teal-800">
-                          {desc[data].bobot}
+                          {desc[data as keyof typeof desc].bobot}
                         </span>{" "}
                         <span className="badge badge-ghost badge-sm bg-fuchsia-200 dark:bg-fuchsia-800">
-                          {desc[data].min}-{desc[data].max}
+                          {desc[data as keyof typeof desc].min}-{desc[data as keyof typeof desc].max}
                         </span>
                       </div>
                     </label>
                     <input
                       type="number"
-                      min={desc[data].min}
-                      max={desc[data].max}
+                      min={desc[data as keyof typeof desc].min}
+                      max={desc[data as keyof typeof desc].max}
                       name={data}
                       placeholder={data}
                       value={nilai[data]}

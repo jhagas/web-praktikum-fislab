@@ -10,11 +10,11 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://fislab.vercel.app"),
+  metadataBase: new URL("https://praktikum-fisika.site"),
   title: "Praktikum Fisika Laboratorium",
   openGraph: {
     type: "website",
-    url: "https://fislab-its.site/",
+    url: "https://praktikum-fisika.site",
     title: "Praktikum Fisika Laboratorium, Fisika ITS",
     description:
       "Laman Web Penjadwalan dan Penilaian Praktikum Fisika Laboratorium Departemen Fisika Institut Teknologi Sepuluh Nopember",
