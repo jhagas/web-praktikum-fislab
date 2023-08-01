@@ -1,47 +1,55 @@
-"use client";
+import Credit from "@/components/credit";
+import Navbar from "@/components/navbar";
+import Redirect from "@/components/redirect";
+import { unique } from "@/lib/utils";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Metadata } from "next";
+import { cookies } from "next/headers";
+import Jadwal from "./component";
 
-import { useEffect, useState } from "react";
-import Loading from "@/components/loading";
-import { mingguKuliah, rangeMinggu } from "@/lib/utils";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import TabelJadwal from "@/components/tabel-jadwal";
-import ListMinggu from "@/components/minggu-list";
+export const metadata: Metadata = {
+  title: "Jadwal Okupansi | Praktikum Fisika Laboratorium",
+  description:
+    "Halaman Untuk melihat jadwal yang terisi pada laman web Praktikum Fisika Laboratorium",
+};
 
-type Data =
-  | {
-      jadwal: any;
-    }[]
-  | null;
+export const dynamic = "force-dynamic";
 
-export default function Jadwal() {
-  const supabase = createClientComponentClient();
-  const { minggu } = mingguKuliah();
-  const [selected, setSelected] = useState(minggu);
+export default async function Layout({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const supabase = createServerComponentClient({ cookies });
 
-  const { awalMinggu, akhirMinggu } = rangeMinggu(selected);
-  const monday = awalMinggu.toISOString();
-  const sunday = akhirMinggu.toISOString();
-  const [data, setData] = useState<Data>();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  useEffect(() => {
-    async function fetchData() {
-      const { data } = await supabase
-        .from("user_praktikum_linker")
-        .select("jadwal, kelompok, profiles(full_name)")
-        .eq("praktikum_role", "aslab")
-        .gt("jadwal", monday)
-        .lt("jadwal", sunday);
-      setData(data);
-    }
-    fetchData();
-  }, [monday, sunday]);
+  const roleFetch = await supabase
+    .from("user_praktikum_linker")
+    .select("praktikum_role")
+    .eq("id", user?.id);
+  const roles: any = roleFetch.data
+    ?.map((data) => data.praktikum_role)
+    .filter(unique);
 
-  if (!data) return <Loading />;
+  if (!user) {
+    return <Redirect to="/" />;
+  }
 
   return (
-    <>
-      <ListMinggu state={selected} setState={setSelected} minggu={minggu} />
-      <TabelJadwal data={data} awalMinggu={awalMinggu} />
-    </>
+    <div className="min-h-screen dark:bg-zinc-900">
+      <Navbar
+        nama={user?.user_metadata.full_name}
+        nrp={user?.user_metadata.nrp}
+        user={user}
+        roles={roles}
+      />
+      <div className="px-3 py-6">
+        <Jadwal searchParams={searchParams} />
+      </div>
+      <Credit />
+    </div>
   );
 }

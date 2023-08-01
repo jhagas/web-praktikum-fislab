@@ -2,9 +2,15 @@ import { changeTimeZone, inRangeMinggu } from "@/lib/utils";
 import DateFormatter from "./date-formatter";
 
 type Params = {
-  data: {
-    jadwal: any;
-  }[];
+  data:
+    | {
+        jadwal: any;
+        kelompok: any;
+        profiles: {
+          full_name: any;
+        }[];
+      }[]
+    | null;
   awalMinggu: Date;
 };
 
@@ -25,7 +31,7 @@ export default function TabelJadwal({ data, awalMinggu }: Params) {
               </thead>
               <tbody>
                 {rangePekan.map((d, i) => {
-                  const inTime = data.filter(
+                  const inTime = data?.filter(
                     (time) =>
                       changeTimeZone(
                         new Date(time.jadwal + "-0000"),
@@ -50,7 +56,7 @@ export default function TabelJadwal({ data, awalMinggu }: Params) {
                       </td>
                       <td>
                         <ul>
-                          {inTime.map((dd: any, ii) => (
+                          {inTime?.map((dd: any, ii) => (
                             <li key={ii} className="whitespace-nowrap">
                               <p className="inline">{dd.profiles.full_name}</p>{" "}
                               <p className="inline font-bold">

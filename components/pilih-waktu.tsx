@@ -42,7 +42,7 @@ export default function PilihanWaktu({
 
   const timeSelected = data?.jadwal
     ? formatInTimeZone(data?.jadwal + "-0000", "Asia/Jakarta", "HH:mm")
-    : "23:00";
+    : "18:30";
 
   const [selected, setSelected] = useState(currentDate);
   const [hours, setHours] = useState(timeSelected);
