@@ -33,10 +33,7 @@ export default function TabelJadwal({ data, awalMinggu }: Params) {
                 {rangePekan.map((d, i) => {
                   const inTime = data?.filter(
                     (time) =>
-                      changeTimeZone(
-                        new Date(time.jadwal + "-0000"),
-                        "Asia/Jakarta"
-                      ).getTime() === d.getTime()
+                      new Date(time.jadwal + "-0000").getTime() === d.getTime()
                   );
 
                   return (

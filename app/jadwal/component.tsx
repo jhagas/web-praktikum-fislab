@@ -1,16 +1,8 @@
-import Loading from "@/components/loading";
 import { mingguKuliah, rangeMinggu } from "@/lib/utils";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import TabelJadwal from "@/components/tabel-jadwal";
 import ListMinggu from "@/components/minggu-list";
 import { cookies } from "next/headers";
-import Redirect from "@/components/redirect";
-
-type Data =
-  | {
-      jadwal: any;
-    }[]
-  | null;
 
 export const dynamic = "force-dynamic";
 

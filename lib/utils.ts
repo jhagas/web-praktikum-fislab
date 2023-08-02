@@ -1,3 +1,5 @@
+import { addDays } from "date-fns";
+
 export function changeTimeZone(date: Date | string, timeZone: string) {
   if (typeof date === "string") {
     return new Date(
@@ -69,15 +71,9 @@ export function mingguKuliah() {
 }
 
 export function rangeMinggu(week: number) {
-  const date = changeTimeZone(new Date(mulaiKuliah), "Asia/Jakarta");
-  const today = new Date(date.setDate(date.getDate() + 7 * (week - 1)));
-
-  const awalMinggu = new Date(
-    today.setDate(today.getDate() - today.getDay() + 1)
-  );
-  const akhirMinggu = new Date(
-    today.setDate(today.getDate() - today.getDay() + 7)
-  );
+  const first = new Date(mulaiKuliah);
+  const awalMinggu = addDays(first, 7 * (week - 1));
+  const akhirMinggu = addDays(first, 7 * (week - 1) + 6);
 
   return { awalMinggu, akhirMinggu };
 }
@@ -86,8 +82,8 @@ export const mingguList = [
   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
 ];
 
-export const weekdays = [13.5, 16, 18.5];
-export const saturday = [9, 12.5, 15, 18.5];
+export const weekdays = [6.5, 9, 11.5];
+export const saturday = [2, 5.5, 8, 11.5];
 
 export function convertTime(data: number) {
   const hour = Math.floor(data);
@@ -102,32 +98,28 @@ export function convertTime(data: number) {
 
 export function inRangeMinggu(a: Date) {
   let array = [];
-  const limit = 6 - (a.getDay() - 1);
+  const limit = 6;
 
   for (let i = 0; i < limit; i++) {
-    const awal = changeTimeZone(new Date(a), "Asia/Jakarta");
+    const awal = new Date(a);
     awal.setDate(awal.getDate() + i);
-
-    if (limit === 7 && i === 0) {
-      continue;
-    }
 
     if (i < limit - 1) {
       for (let j = 0; j < weekdays.length; j++) {
-        const temp2 = changeTimeZone(new Date(awal), "Asia/Jakarta");
+        const temp2 = new Date(awal);
         temp2.setHours(temp2.getHours() + weekdays[j]);
         temp2.setMinutes((weekdays[j] % 1) * 60);
 
-        const timer = changeTimeZone(new Date(temp2), "Asia/Jakarta");
+        const timer = new Date(temp2);
         array.push(timer);
       }
     } else {
       for (let j = 0; j < saturday.length; j++) {
-        const temp3 = changeTimeZone(new Date(awal), "Asia/Jakarta");
+        const temp3 = new Date(awal);
         temp3.setHours(temp3.getHours() + saturday[j]);
         temp3.setMinutes((saturday[j] % 1) * 60);
 
-        const timer = changeTimeZone(new Date(temp3), "Asia/Jakarta");
+        const timer = new Date(temp3);
         array.push(timer);
       }
     }

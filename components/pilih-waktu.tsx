@@ -138,7 +138,7 @@ export default function PilihanWaktu({
                         : "!btn-outline dark:!border-orange-500 dark:!text-zinc-100"
                     }`}
                   >
-                    {convertTime(data)}
+                    {convertTime(data + 7)}
                   </div>
                 ))
               : weekdays.map((data, i) => (
@@ -151,7 +151,7 @@ export default function PilihanWaktu({
                         : "!btn-outline !border-orange-500 dark:!text-zinc-100"
                     }`}
                   >
-                    {convertTime(data)}
+                    {convertTime(data + 7)}
                   </div>
                 ))}
           </div>
