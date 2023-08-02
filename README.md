@@ -5,6 +5,7 @@ Website ini digunakan untuk penilaian dan penjadwalan praktikum mata kuliah Fisi
 Praktikum dilaksanakan dengan rekrutmen asisten secara terbuka, serta mengelompokkan praktikan berjumlah sekitar 10 orang berdasarkan mata kuliahnya. Praktikum dilaksanakan seminggu sekali untuk tiap mata kuliah dengan urutan judul yang ditentukan di awal. Tiap mata kuliah yang dipraktikumkan memiliki modul yang bisa diakses oleh praktikan. Dimungkinkan asisten pada mata kuliah Fisika Laboratorium 1 juga menjadi praktikan pada mata kuliah Fisika Laboratorium 2. Karena perbedaan target angkatan pada tiap mata kuliah.
 
 Dari hal tersebut, dibentuklah struktur database seperti berikut (belum termasuk skema user dan storage dari Supabase)
+
 ![Struktur Database](./images/struktur.png)
 
 ## Goal / MVP
