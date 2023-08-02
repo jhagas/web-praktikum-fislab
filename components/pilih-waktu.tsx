@@ -8,8 +8,13 @@ import Loading from "./loading";
 import { useEffect } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import DateFormatter from "./date-formatter";
-import { formatInTimeZone } from "date-fns-tz";
-import { subDays } from "date-fns";
+import { format, subDays } from "date-fns";
+
+const dateFormat = (date: Date) =>
+  changeTimeZone(
+    new Date(format(date, "yyyy-MM-dd'T00:00:00-0000'")),
+    "Africa/Dakar"
+  );
 
 type Params = {
   kelompok: string;
@@ -37,11 +42,11 @@ export default function PilihanWaktu({
   const supabase = createClientComponentClient();
 
   const currentDate = data?.jadwal
-    ? changeTimeZone(new Date(data?.jadwal + "-0000"), "Asia/Jakarta")
-    : changeTimeZone(new Date(), "Asia/Jakarta");
+    ? new Date(data?.jadwal + "-0000")
+    : new Date();
 
   const timeSelected = data?.jadwal
-    ? formatInTimeZone(data?.jadwal + "-0000", "Asia/Jakarta", "HH:mm")
+    ? format(new Date(data?.jadwal + "-0000"), "HH:mm")
     : "18:30";
 
   const [selected, setSelected] = useState(currentDate);
@@ -57,14 +62,8 @@ export default function PilihanWaktu({
   }, [data, supabase]);
 
   const send = changeTimeZone(
-    new Date(
-      formatInTimeZone(
-        selected,
-        "Asia/Jakarta",
-        "yyyy-MM-dd'T'" + hours + "':00'"
-      )
-    ),
-    "Asia/Jakarta"
+    new Date(format(selected, "yyyy-MM-dd'T'" + hours + "':00-0000'")),
+    "Africa/Dakar"
   ).toISOString();
 
   async function onSetJadwal() {
@@ -124,7 +123,7 @@ export default function PilihanWaktu({
               isValidDate={valid}
               timeFormat={false}
               value={selected}
-              onChange={(e: any) => setSelected(e._d)}
+              onChange={(e: any) => setSelected(dateFormat(e._d))}
             />
           </div>
           <div className="flex gap-3 justify-center mt-3">

@@ -1,5 +1,4 @@
-import { parseISO } from "date-fns";
-import { formatInTimeZone } from "date-fns-tz";
+import { format, parseISO } from "date-fns";
 import { id } from "date-fns/locale";
 
 type Props = {
@@ -12,7 +11,7 @@ const DateFormatter = ({ dateString, formatStr, className }: Props) => {
   const date = parseISO(dateString);
   return (
     <time dateTime={dateString} className={className}>
-      {formatInTimeZone(date, "Asia/Jakarta", formatStr, { locale: id })}
+      {format(date, formatStr, { locale: id })}
     </time>
   );
 };
