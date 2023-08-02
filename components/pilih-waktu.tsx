@@ -102,7 +102,7 @@ export default function PilihanWaktu({
         <>
           <p className="text-center font-semibold text-xl">Jadwal</p>
           <DateFormatter
-            dateString={data?.jadwal + "-0000"}
+            dateString={data?.jadwal}
             formatStr="iiii, dd MMMM yyyy 'Pukul' HH:mm"
             className="text-sm text-center"
           />
