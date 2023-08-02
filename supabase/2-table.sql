@@ -35,7 +35,7 @@ create table
     kelompok text,
     kode_praktikum text references praktikum,
     praktikum_role krole,
-    jadwal timestamp,
+    jadwal timestamp with time zone,
     minggu int2,
     nilai jsonb,
     PRIMARY KEY (id, kelompok, kode_praktikum)
