@@ -47,7 +47,7 @@ export default function PilihanWaktu({
 
   const timeSelected = data?.jadwal
     ? format(new Date(data?.jadwal + "-0000"), "HH:mm")
-    : "18:30";
+    : "11:30";
 
   const [selected, setSelected] = useState(currentDate);
   const [hours, setHours] = useState(timeSelected);
@@ -61,10 +61,8 @@ export default function PilihanWaktu({
     getRestricted();
   }, [data, supabase]);
 
-  const send = changeTimeZone(
-    new Date(format(selected, "yyyy-MM-dd'T'" + hours + "':00-0000'")),
-    "Africa/Dakar"
-  ).toISOString();
+  const send = format(selected, "yyyy-MM-dd'T'" + hours + "':00'");
+  console.log(send);
 
   async function onSetJadwal() {
     await supabase
@@ -131,9 +129,9 @@ export default function PilihanWaktu({
               ? saturday.map((data, i) => (
                   <div
                     key={i}
-                    onClick={() => setHours(convertTime(data + 7))}
+                    onClick={() => setHours(convertTime(data))}
                     className={`btn btn-sm dark:hover:!bg-orange-700 ${
-                      hours === convertTime(data + 7)
+                      hours === convertTime(data)
                         ? "dark:!bg-orange-600"
                         : "!btn-outline dark:!border-orange-500 dark:!text-zinc-100"
                     }`}
@@ -144,9 +142,9 @@ export default function PilihanWaktu({
               : weekdays.map((data, i) => (
                   <div
                     key={i}
-                    onClick={() => setHours(convertTime(data + 7))}
+                    onClick={() => setHours(convertTime(data))}
                     className={`btn btn-sm dark:hover:!bg-orange-700 ${
-                      hours === convertTime(data + 7)
+                      hours === convertTime(data)
                         ? "dark:!bg-orange-600"
                         : "!btn-outline !border-orange-500 dark:!text-zinc-100"
                     }`}
