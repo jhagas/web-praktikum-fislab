@@ -70,18 +70,13 @@ export function mingguKuliah() {
 
 export function rangeMinggu(week: number) {
   const date = changeTimeZone(new Date(mulaiKuliah), "Asia/Jakarta");
-  const today = changeTimeZone(
-    new Date(date.setDate(date.getDate() + 7 * (week - 1))),
-    "Asia/Jakarta"
-  );
+  const today = new Date(date.setDate(date.getDate() + 7 * (week - 1)));
 
-  const awalMinggu = changeTimeZone(
-    new Date(today.setDate(today.getDate() - today.getDay() + 1)),
-    "Asia/Jakarta"
+  const awalMinggu = new Date(
+    today.setDate(today.getDate() - today.getDay() + 1)
   );
-  const akhirMinggu = changeTimeZone(
-    new Date(today.setDate(today.getDate() - today.getDay() + 7)),
-    "Asia/Jakarta"
+  const akhirMinggu = new Date(
+    today.setDate(today.getDate() - today.getDay() + 7)
   );
 
   return { awalMinggu, akhirMinggu };
