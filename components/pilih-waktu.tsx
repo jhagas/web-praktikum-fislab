@@ -131,9 +131,9 @@ export default function PilihanWaktu({
               ? saturday.map((data, i) => (
                   <div
                     key={i}
-                    onClick={() => setHours(convertTime(data))}
+                    onClick={() => setHours(convertTime(data + 7))}
                     className={`btn btn-sm dark:hover:!bg-orange-700 ${
-                      hours === convertTime(data)
+                      hours === convertTime(data + 7)
                         ? "dark:!bg-orange-600"
                         : "!btn-outline dark:!border-orange-500 dark:!text-zinc-100"
                     }`}
@@ -144,9 +144,9 @@ export default function PilihanWaktu({
               : weekdays.map((data, i) => (
                   <div
                     key={i}
-                    onClick={() => setHours(convertTime(data))}
+                    onClick={() => setHours(convertTime(data + 7))}
                     className={`btn btn-sm dark:hover:!bg-orange-700 ${
-                      hours === convertTime(data)
+                      hours === convertTime(data + 7)
                         ? "dark:!bg-orange-600"
                         : "!btn-outline !border-orange-500 dark:!text-zinc-100"
                     }`}
