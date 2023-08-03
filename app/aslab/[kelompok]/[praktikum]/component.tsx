@@ -6,6 +6,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import PenilaianPraktikan from "@/components/penilaian-praktikan";
+import Loading from "@/components/loading";
 
 type Praktikan = {
   id: any;
@@ -77,6 +78,7 @@ export default function Main() {
   }, [triggerNilai]);
 
   praktikan?.sort(sortStringArray);
+  if (!data) return <Loading />;
 
   return (
     <>

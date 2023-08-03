@@ -4,7 +4,7 @@ import { ChangeEventHandler, useEffect, useRef } from "react";
 import { useState } from "react";
 import { useCallback } from "react";
 import Cropper from "react-easy-crop";
-import getCroppedImg from "./crop-image";
+import getCroppedImg from "../lib/crop-image";
 import FileResizer from "react-image-file-resizer";
 import {
   Session,

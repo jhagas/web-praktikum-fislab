@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import DateFormatter from "./date-formatter";
 import { format, subDays } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 
 const dateFormat = (date: Date) =>
   changeTimeZone(
@@ -42,12 +43,12 @@ export default function PilihanWaktu({
   const supabase = createClientComponentClient();
 
   const currentDate = data?.jadwal
-    ? new Date(data?.jadwal + "-0000")
+    ? new Date(data.jadwal + "-0000")
     : new Date();
 
   const timeSelected = data?.jadwal
-    ? format(new Date(data?.jadwal + "-0000"), "HH:mm")
-    : "11:30";
+    ? formatInTimeZone(new Date(data.jadwal + "-0000"), "Africa/Abidjan", "HH:mm")
+    : null;
 
   const [selected, setSelected] = useState(currentDate);
   const [hours, setHours] = useState(timeSelected);
@@ -62,7 +63,6 @@ export default function PilihanWaktu({
   }, [data, supabase]);
 
   const send = format(selected, "yyyy-MM-dd'T'" + hours + "':00'");
-  console.log(send);
 
   async function onSetJadwal() {
     await supabase

@@ -5,6 +5,7 @@ import { desc, hitungNilai } from "@/lib/utils";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useState } from "react";
 import { useEffect } from "react";
+import { ImSpinner2 } from "react-icons/im";
 
 type Props = {
   data: {
@@ -39,6 +40,7 @@ export default function PenilaianPraktikan({
 }: Props) {
   const [nilai, setNilai] = useState(data.nilai);
   const [safe, setSafe] = useState<boolean>();
+  const [fetching, setFetching] = useState(false);
   const supabase = createClientComponentClient();
 
   useEffect(() => {
@@ -59,15 +61,21 @@ export default function PenilaianPraktikan({
     setNilai({ ...nilai, [name]: value });
   }
 
-  async function onSetNilai() {
-    await supabase
+  async function onSetNilai(event: { preventDefault: () => void }) {
+    event.preventDefault();
+    setFetching(true);
+    const { error } = await supabase
       .from("user_praktikum_linker")
       .update({ nilai: nilai })
       .eq("id", data.id)
       .eq("kelompok", data.kelompok)
       .eq("kode_praktikum", data.kode_praktikum);
 
-    reexecute();
+    if (!error) {
+      setFetching(false);
+      reexecute();
+      document.getElementById(`penilaian${index}`)?.click();
+    }
   }
 
   const options: any = {
@@ -117,69 +125,76 @@ export default function PenilaianPraktikan({
               </span>
             </div>
             <p className="font-semibold text-lg mt-3">
-              Nilai Akhir :{" "}
-              {hitungNilai(nilai).toLocaleString(options)}
+              Nilai Akhir : {hitungNilai(nilai).toLocaleString(options)}
             </p>
-            <div className="flex gap-2 mt-4 flex-wrap justify-center">
-              {Object.keys(nilai).map((data, index) => {
-                const aman =
-                  (nilai[data] < desc[data as keyof typeof desc].min ||
-                    nilai[data] > desc[data as keyof typeof desc].max) &&
-                  nilai[data as keyof typeof desc] !== 0;
-                return (
-                  <div key={index} className="min-w-min max-w-[17rem] w-full">
-                    <label className="label-text infodash">
-                      {desc[data as keyof typeof desc].nama}{" "}
-                      <div className="inline whitespace-nowrap">
-                        <span className="badge badge-ghost badge-sm bg-green-200 dark:bg-teal-800">
-                          {desc[data as keyof typeof desc].bobot}
-                        </span>{" "}
-                        <span className="badge badge-ghost badge-sm bg-fuchsia-200 dark:bg-fuchsia-800">
-                          {desc[data as keyof typeof desc].min}-{desc[data as keyof typeof desc].max}
-                        </span>
-                      </div>
-                    </label>
-                    <input
-                      type="number"
-                      min={desc[data as keyof typeof desc].min}
-                      max={desc[data as keyof typeof desc].max}
-                      name={data}
-                      placeholder={data}
-                      value={nilai[data]}
-                      onChange={handleChange}
-                      className="input input-bordered w-full border-slate-300 focus:border-slate-500 focus:outline-none dark:bg-zinc-700 dark:border-zinc-500 focus:dark:border-zinc-300 dark:text-zinc-100 input-sm"
-                    />
-                    <p className="text-red-600 text-sm font-medium">
-                      {aman ? "Masukan tidak sesuai" : null}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="modal-action">
-              {JSON.stringify(nilai) === JSON.stringify(data.nilai) || safe ? (
-                <label htmlFor={`penilaian${index}`} className="btn">
-                  Batal
-                </label>
-              ) : (
-                <>
-                  <label
-                    htmlFor={`penilaian${index}`}
-                    className="btn"
-                    onClick={() => setNilai(data.nilai)}
-                  >
+            <form className="mt-4" onSubmit={onSetNilai}>
+              <div className="flex gap-2 flex-wrap justify-center">
+                {Object.keys(nilai).map((data, index) => {
+                  const aman =
+                    (nilai[data] < desc[data as keyof typeof desc].min ||
+                      nilai[data] > desc[data as keyof typeof desc].max) &&
+                    nilai[data as keyof typeof desc] !== 0;
+                  return (
+                    <div key={index} className="min-w-min max-w-[17rem] w-full">
+                      <label className="label-text infodash">
+                        {desc[data as keyof typeof desc].nama}{" "}
+                        <div className="inline whitespace-nowrap">
+                          <span className="badge badge-ghost badge-sm bg-green-200 dark:bg-teal-800">
+                            {desc[data as keyof typeof desc].bobot}
+                          </span>{" "}
+                          <span className="badge badge-ghost badge-sm bg-fuchsia-200 dark:bg-fuchsia-800">
+                            {desc[data as keyof typeof desc].min}-
+                            {desc[data as keyof typeof desc].max}
+                          </span>
+                        </div>
+                      </label>
+                      <input
+                        type="number"
+                        min={desc[data as keyof typeof desc].min}
+                        max={desc[data as keyof typeof desc].max}
+                        name={data}
+                        placeholder={data}
+                        value={nilai[data]}
+                        onChange={handleChange}
+                        className="input input-bordered w-full border-slate-300 focus:border-slate-500 focus:outline-none dark:bg-zinc-700 dark:border-zinc-500 focus:dark:border-zinc-300 dark:text-zinc-100 input-sm"
+                      />
+                      <p className="text-red-600 text-sm font-medium">
+                        {aman ? "Masukan tidak sesuai" : null}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="modal-action">
+                {JSON.stringify(nilai) === JSON.stringify(data.nilai) ||
+                safe ? (
+                  <label htmlFor={`penilaian${index}`} className="btn">
                     Batal
                   </label>
-                  <label
-                    htmlFor={`penilaian${index}`}
-                    className="btn"
-                    onClick={onSetNilai}
-                  >
-                    Selesai
-                  </label>
-                </>
-              )}
-            </div>
+                ) : (
+                  <>
+                    <label
+                      htmlFor={`penilaian${index}`}
+                      className="btn"
+                      onClick={() => setNilai(data.nilai)}
+                    >
+                      Batal
+                    </label>
+                    {fetching ? (
+                      <button className="btn">
+                        <ImSpinner2 className="animate-spin" />
+                      </button>
+                    ) : (
+                      <label htmlFor={`penilaian${index}`}>
+                        <button type="submit" className="btn">
+                          Selesai
+                        </button>
+                      </label>
+                    )}
+                  </>
+                )}
+              </div>
+            </form>
           </div>
         </div>
       </div>
