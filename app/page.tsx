@@ -1,9 +1,9 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { unique } from "@/lib/utils";
 import { cookies } from "next/headers";
-import Redirect from "@/components/redirect";
+import { redirect } from "next/navigation";
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 export default async function Main() {
   let roles;
@@ -14,7 +14,7 @@ export default async function Main() {
   } = await supabase.auth.getSession();
 
   if (!session) {
-    return <Redirect to="/login" />;
+    redirect("/login");
   } else {
     let { data } = await supabase
       .from("user_praktikum_linker")
@@ -28,11 +28,11 @@ export default async function Main() {
       roles.find((element) => element === "aslab") &&
       roles.find((element) => element === "praktikan")
     ) {
-      return <Redirect to="/aslab" />;
+      redirect("/aslab");
     } else if (roles.find((element) => element === "aslab")) {
-      return <Redirect to="/aslab" />;
+      redirect("/aslab");
     } else if (roles.find((element) => element === "praktikan")) {
-      return <Redirect to="/praktikan" />;
+      redirect("/praktikan");
     }
   }
 

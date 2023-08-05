@@ -2,7 +2,6 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import Navbar from "@/components/navbar";
 import { unique } from "@/lib/utils";
-import Redirect from "@/components/redirect";
 import Pekan from "../../components/pekan";
 import ThisWeek from "../../components/this-week";
 import Modul from "../../components/modul";
@@ -10,6 +9,7 @@ import { AiOutlineInfoCircle } from "react-icons/ai";
 import Credit from "../../components/credit";
 import TabelPraktikan from "../../components/tabel-praktikan";
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Dashboard Praktikan | Praktikum Fisika Laboratorium",
@@ -35,7 +35,7 @@ export default async function Index() {
     .filter(unique);
 
   if (!user || !roles.find((element: any) => element === "praktikan")) {
-    return <Redirect to="/" />;
+    redirect("/")
   }
 
   const { data } = await supabase

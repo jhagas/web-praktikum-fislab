@@ -1,7 +1,7 @@
-import Redirect from "@/components/redirect";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Masuk | Praktikum Fisika Laboratorium",
@@ -23,7 +23,7 @@ export default async function Layout({
   } = await supabase.auth.getUser();
 
   if (user) {
-    return <Redirect to="/" />;
+    redirect("/");
   }
 
   return <section className="min-h-screen">{children}</section>;

@@ -2,10 +2,10 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import Navbar from "@/components/navbar";
 import { titleCase, unique } from "@/lib/utils";
-import Redirect from "@/components/redirect";
 import { Metadata } from "next";
 import Credit from "@/components/credit";
 import Main from "./component";
+import { redirect } from "next/navigation";
 
 type Props = {
   params: { kelompok: string; praktikum: string };
@@ -62,9 +62,9 @@ export default async function Index({ params }: Props) {
     .single();
 
   if (!user || !roles.find((element: any) => element === "aslab")) {
-    return <Redirect to="/" />;
+    redirect("/");
   }
-  if (!data) return <Redirect to="/404" />;
+  if (!data) return redirect("/404");
 
   return (
     <div className="min-h-screen dark:bg-zinc-900">

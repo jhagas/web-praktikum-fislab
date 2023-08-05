@@ -2,13 +2,13 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import Navbar from "@/components/navbar";
 import { unique } from "@/lib/utils";
-import Redirect from "@/components/redirect";
 import { Metadata } from "next";
 import Credit from "@/components/credit";
 import Modul from "@/components/modul";
 import Pekan from "@/components/pekan";
 import ThisWeek from "@/components/this-week";
 import TabelAslab from "@/components/tabel-aslab";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Dashboard Asisten | Praktikum Fisika Laboratorium",
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     "Dashboard Asisten Pada Laman Web Penjadwalan dan Penilaian Praktikum Fisika Laboratorium Departemen Fisika Institut Teknologi Sepuluh Nopember",
 };
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 export default async function Index() {
   const supabase = createServerComponentClient({ cookies });
@@ -41,7 +41,7 @@ export default async function Index() {
     .order("minggu", { ascending: true });
 
   if (!user || !roles.find((element: any) => element === "aslab")) {
-    return <Redirect to="/" />;
+    redirect("/");
   }
 
   return (
