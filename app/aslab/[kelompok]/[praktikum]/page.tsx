@@ -52,6 +52,10 @@ export default async function Index({ params }: Props) {
     ?.map((data) => data.praktikum_role)
     .filter(unique);
 
+  if (!user || !roles.find((element: any) => element === "aslab")) {
+    redirect("/");
+  }
+
   const { data }: { data: Data } = await supabase
     .from("user_praktikum_linker")
     .select("kelompok, kode_praktikum, praktikum(judul, matkul)")
@@ -61,9 +65,6 @@ export default async function Index({ params }: Props) {
     .eq("kode_praktikum", praktikum)
     .single();
 
-  if (!user || !roles.find((element: any) => element === "aslab")) {
-    redirect("/");
-  }
   if (!data) return redirect("/404");
 
   return (

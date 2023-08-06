@@ -26,6 +26,10 @@ export default async function Layout({
     data: { user },
   } = await supabase.auth.getUser();
 
+  if (!user) {
+    redirect("/");
+  }
+
   const roleFetch = await supabase
     .from("user_praktikum_linker")
     .select("praktikum_role")
@@ -33,10 +37,6 @@ export default async function Layout({
   const roles: any = roleFetch.data
     ?.map((data) => data.praktikum_role)
     .filter(unique);
-
-  if (!user) {
-    redirect("/");
-  }
 
   return (
     <div className="min-h-screen dark:bg-zinc-900">

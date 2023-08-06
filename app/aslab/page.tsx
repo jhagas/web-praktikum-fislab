@@ -33,16 +33,16 @@ export default async function Index() {
     ?.map((data) => data.praktikum_role)
     .filter(unique);
 
+  if (!user || !roles.find((element: any) => element === "aslab")) {
+    redirect("/");
+  }
+
   const { data } = await supabase
     .from("user_praktikum_linker")
     .select("*,praktikum(id,judul,matkul(id,modul_link))")
     .eq("id", user?.id)
     .eq("praktikum_role", "aslab")
     .order("minggu", { ascending: true });
-
-  if (!user || !roles.find((element: any) => element === "aslab")) {
-    redirect("/");
-  }
 
   return (
     <div className="min-h-screen dark:bg-zinc-900">

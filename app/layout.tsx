@@ -1,10 +1,10 @@
 import ThemeProvider from "@/components/providers/theme";
-import { Inter } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 
-const inter = Inter({
+const font = Open_Sans({
   subsets: ["latin"],
   display: "swap",
 });
@@ -30,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="id" className={inter.className}>
+    <html lang="id" className={font.className}>
       <body>
         <main className="min-h-screen">
           <ThemeProvider>{children}</ThemeProvider>

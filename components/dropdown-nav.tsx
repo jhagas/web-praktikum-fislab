@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useDark } from "@/lib/dark";
 import Link from "next/link";
@@ -58,14 +58,9 @@ export default function Dropdown({ data, nama, nrp, roles }: params) {
           </li>
         ) : null}
         <li>
-          <label htmlFor="ppChange" className="nav-item">
-            Ubah Foto Profil
-          </label>
-        </li>
-        <li>
-          <label htmlFor="passwordChange" className="nav-item">
-            Ubah Password
-          </label>
+          <Link href="/settings" className="nav-item">
+            Pengaturan Akun
+          </Link>
         </li>
         <li>
           <Link href="/jadwal" className="nav-item">

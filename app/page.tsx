@@ -23,6 +23,16 @@ export default async function Main() {
     roles = data?.map((data) => data.praktikum_role).filter(unique);
   }
 
+  let { data } = await supabase
+    .from("profiles")
+    .select("ischanged")
+    .eq("id", session.user.id)
+    .single();
+
+  if (data?.ischanged === false) {
+    redirect("/first-time");
+  }
+
   if (roles) {
     if (
       roles.find((element) => element === "aslab") &&

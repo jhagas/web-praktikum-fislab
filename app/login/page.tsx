@@ -98,6 +98,7 @@ export default function Index() {
           <button
             onClick={toogleDark}
             className="text-slate-800 dark:text-zinc-300"
+            suppressHydrationWarning
           >
             For Night Owl 🦉
           </button>
@@ -105,6 +106,7 @@ export default function Index() {
           <button
             onClick={toogleDark}
             className="text-slate-800 dark:text-zinc-300"
+            suppressHydrationWarning
           >
             For Day Eagle 🦅️
           </button>

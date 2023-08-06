@@ -40,14 +40,6 @@ export default async function Navbar({ user, nama, nrp, roles }: params) {
           <Dropdown data={data} nama={nama} nrp={nrp} roles={roles} />
         </div>
       </div>
-      <input
-        type="checkbox"
-        id="passwordChange"
-        className="modal-toggle"
-        defaultChecked={!data?.ischanged}
-      />
-      <Password user={user} />
-      <AvatarChange />
     </>
   );
 }
