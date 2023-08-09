@@ -11,9 +11,9 @@ import {
   createClientComponentClient,
 } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
+import { ImSpinner2 } from "react-icons/im";
 
 function usePPUpdate() {
-  const router = useRouter();
   const [user, setUser] = useState<Session["user"] | null>();
   const supabase = createClientComponentClient();
 
@@ -55,8 +55,6 @@ function usePPUpdate() {
       .from("profiles")
       .update({ avatar_url: `${user?.id}.png` })
       .match({ id: user?.id });
-
-    router.push("/first-time/password");
   }
 
   return upload;
@@ -77,16 +75,21 @@ export function AvatarChangeFT() {
   const [imageSrc, setImageSrc] = useState<any>(null);
   const file: any = useRef();
   const upload = usePPUpdate();
+  const [fetching, setFetching] = useState(false);
+  const router = useRouter();
 
   const onCropComplete = useCallback((a: any, croppedAreaPixels: any) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
   const showCroppedImage = async () => {
+    setFetching(true);
     try {
       const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
       await upload(croppedImage);
       onClose();
+      setFetching(false);
+      router.push("/first-time/password");
     } catch (e) {
       console.error(e);
     }
@@ -131,9 +134,15 @@ export function AvatarChangeFT() {
               onZoomChange={setZoom}
             />
           </div>
-          <div className="btn rounded-t-none" onClick={showCroppedImage}>
-            Selesai
-          </div>
+          {fetching ? (
+            <button className="btn rounded-t-none">
+              <ImSpinner2 className="animate-spin" />
+            </button>
+          ) : (
+            <button className="btn rounded-t-none" onClick={showCroppedImage}>
+              Selesai
+            </button>
+          )}
         </>
       )}
     </>

@@ -3,6 +3,8 @@ import { cookies } from "next/headers";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import "./page.css";
+import { BsArrowRightCircle } from "react-icons/bs";
 
 export const metadata: Metadata = {
   title: "First Time Setup | Praktikum Fisika Laboratorium",
@@ -24,18 +26,27 @@ export default async function Index() {
   }
 
   return (
-    <div className="hero min-h-screen bg-base-200 dark:bg-zinc-900">
+    <div className="hero min-h-screen anim_gradient">
       <div className="hero-content text-center">
         <div className="max-w-md">
-          <h1 className="text-5xl font-bold dark:text-fuchsia-500 text-fuchsia-800">
-            Halo {user.user_metadata.full_name}!!
+          <h1 className="text-3xl md:text-4xl font-extrabold text-white mb-2">
+            👋️👋️
           </h1>
-          <p className="py-6 infodash">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-white">
+            Halo {user.user_metadata.full_name}
+          </h1>
+          <p className="py-6 text-white">
             Selamat datang di aplikasi web penjadwalan dan penilaian praktikum
             Fisika Laboratorium Departemen Fisika Institut Teknologi Sepuluh
             Nopember
           </p>
-          <Link href="/first-time/pp" className="btn btn-primary">Mulai Penyetelan</Link>
+          <Link
+            href="/first-time/pp"
+            className="btn !btn-outline !text-white hover:!bg-[#0f0c29] hover:!border-white"
+          >
+            Mulai Penyetelan
+            <BsArrowRightCircle />
+          </Link>
         </div>
       </div>
     </div>

@@ -43,7 +43,7 @@ export default async function Index() {
               />
             </div>
           </div>
-          <h1 className="text-5xl font-bold dark:text-fuchsia-500 text-fuchsia-800">
+          <h1 className="text-3xl md:text-4xl font-extrabold infodash">
             Ubah Kata Sandi
           </h1>
           <p className="py-3 infodash">

@@ -35,7 +35,7 @@ export default function AvatarComp({ url, size, name }: params) {
 
   return (
     <div style={{ width: size }} aria-live="polite">
-      <div className="rounded-full overflow-clip max-w-fit mx-auto">
+      <div className="rounded-full overflow-clip max-w-fit mx-auto shadow-md">
         {avatarUrl ? (
           <img
             src={avatarUrl}

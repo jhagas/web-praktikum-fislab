@@ -18,7 +18,7 @@ export default function LogoutButton() {
 
   return (
     <div
-      className="btn flex items-center justify-center hover:text-zinc-100"
+      className="btn flex items-center justify-center !bg-red-500 !border-none !text-white"
       onClick={signOut}
     >
         <FiLogOut className="h-full"/>

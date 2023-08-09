@@ -46,23 +46,8 @@ export default function Password({ user }: { user: Session["user"] | null }) {
         />
         <PasswordStrengthBar password={password} />
         <div className="flex gap-2 justify-center mt-3">
-          {password.length < 8 ? (
-            <label
-              htmlFor="passwordChange"
-              className="btn"
-              onClick={() => setPassword("")}
-            >
-              Batal
-            </label>
-          ) : (
+          {password.length >= 8 && (
             <>
-              <label
-                htmlFor="passwordChange"
-                className="btn"
-                onClick={() => setPassword("")}
-              >
-                Batal
-              </label>
               {fetching ? (
                 <button className="btn">
                   <ImSpinner2 className="animate-spin" />

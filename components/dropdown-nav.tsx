@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import LogoutButton from "./logout-button";
 import AvatarComp from "./avatar";
-import AvatarSet from "./avatar-set";
 import SelectRole from "./select-role";
+import { BsCalendarWeek, BsGear, BsKey, BsMoonStars } from "react-icons/bs";
 
 type params = {
   data: any;
@@ -35,7 +35,7 @@ export default function Dropdown({ data, nama, nrp, roles }: params) {
       onBlur={() => setClicked(false)}
     >
       <label tabIndex={0} className="btn btn-ghost flex gap-3" ref={dropdown}>
-        <div className="text-right hidden lg:block">
+        <div className="text-right hidden md:block">
           <p>{nama}</p>
           <p className="font-normal">{nrp}</p>
         </div>
@@ -46,10 +46,10 @@ export default function Dropdown({ data, nama, nrp, roles }: params) {
         className="menu dark:bg-zinc-800 dark:text-zinc-50 menu-compact dropdown-content top-16 right-2 p-2 shadow bg-base-100 rounded-box w-52 gap-2 absolute"
       >
         <li>
-          <div className="flex flex-col gap-1 cursor-default nav-item">
-            <AvatarSet url={data.avatar_url} size={100} name={nama} />
-            <p className="font-bold text-center">{nama}</p>
-            <p className="font-normal">{nrp}</p>
+          <div className="flex flex-col gap-1 nav-item hover:!bg-transparent dark:hover:!bg-transparent !cursor-default">
+            <AvatarComp url={data.avatar_url} size={100} name={nama} />
+            <p className="font-extrabold text-center">{nama}</p>
+            <p className="font-normal opacity-80">{nrp}</p>
           </div>
         </li>
         {roles.length > 1 ? (
@@ -58,26 +58,30 @@ export default function Dropdown({ data, nama, nrp, roles }: params) {
           </li>
         ) : null}
         <li>
-          <Link href="/settings" className="nav-item">
-            Pengaturan Akun
+          <Link href="/settings" className="nav-item gap-3 focus:dark:text-zinc-50">
+            <BsGear size={16} />
+            <p>Pengaturan Akun</p>
           </Link>
         </li>
         <li>
-          <Link href="/jadwal" className="nav-item">
-            Jadwal Keseluruhan
+          <Link href="/jadwal" className="nav-item gap-3 focus:dark:text-zinc-50">
+            <BsCalendarWeek size={16} />
+            <p>Okupansi Lab</p>
           </Link>
         </li>
         <li>
-          <Link href="/about-admin" className="nav-item">
-            Tentang Admin
+          <Link href="/about-admin" className="nav-item gap-3 focus:dark:text-zinc-50">
+            <BsKey size={16} />
+            <p>Tentang Admin</p>
           </Link>
         </li>
         <li>
-          <div className="flex justify-between nav-item" onClick={toogleDark}>
+          <div className="flex nav-item gap-3" onClick={toogleDark}>
+            <BsMoonStars size={16} />
             <label>Mode Gelap</label>
             <input
               type="checkbox"
-              className="toggle"
+              className="toggle toggle-sm ml-auto"
               checked={dark}
               onChange={toogleDark}
               onClick={toogleDark}

@@ -1,8 +1,6 @@
-import { AvatarChange } from "./avatar-crop";
 import { Session } from "@supabase/supabase-js";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
-import Password from "./password";
 import { cookies } from "next/headers";
 import Dropdown from "./dropdown-nav";
 
@@ -18,22 +16,22 @@ export default async function Navbar({ user, nama, nrp, roles }: params) {
 
   let { data } = await client
     .from("profiles")
-    .select("ischanged, avatar_url")
+    .select("avatar_url")
     .eq("id", user?.id)
     .single();
 
   return (
     <>
-      <div className="navbar bg-base-100/50 shadow-md shadow-slate-900/5 sticky top-0 z-50 backdrop-blur-md dark:bg-zinc-900/50">
+      <div className="navbar bg-base-100/50 sticky top-0 z-50 backdrop-blur-md dark:bg-zinc-900/50">
         <div className="navbar-start">
-          <Link
+        <Link
             href="/"
             className="btn btn-ghost normal-case text-lg flex gap-3"
           >
-            <div className="w-8 h-8 logo">
+            <div className="w-7 h-7 logo">
               <img src="/assets/icon.svg" alt="" />
             </div>
-            <p>Fisika Laboratorium</p>
+            <p className="text-[1rem]">Fisika Laboratorium</p>
           </Link>
         </div>
         <div className="navbar-end">

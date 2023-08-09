@@ -1,0 +1,30 @@
+.infodash {
+  @apply dark:text-zinc-100 text-slate-800;
+}
+
+.pen {
+  @apply relative translate-x-28 -translate-y-12 text-xl;
+  @apply rounded-full w-12 h-12 flex justify-center items-center text-xl;
+  @apply dark:bg-zinc-700 bg-zinc-200 infodash border-white border-4 dark:border-zinc-900;
+  @apply hover:bg-zinc-100 hover:dark:bg-zinc-700 transition-all duration-300 active:scale-90;
+}
+
+.data {
+  @apply dark:bg-zinc-800 bg-zinc-100 transition-colors duration-300 infodash text-base;
+  @apply flex justify-between items-center py-4 px-6;
+  @apply flex-col sm:flex-row;
+}
+
+.data2 {
+    @apply dark:bg-zinc-800 bg-zinc-100 transition-colors duration-300 infodash text-base;
+    @apply flex justify-between items-center py-4 px-6;
+  }
+
+.hover {
+  @apply hover:bg-zinc-200 hover:dark:bg-zinc-700/80;
+}
+
+.pass {
+    @apply flex justify-between items-center w-full;
+    @apply flex-col sm:flex-row;
+  }

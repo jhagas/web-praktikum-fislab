@@ -1,17 +1,30 @@
 import Credit from "@/components/credit";
 import Navbar from "@/components/navbar";
-import { unique } from "@/lib/utils";
+import { mingguKuliah, unique } from "@/lib/utils";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import Jadwal from "./component";
 import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Jadwal Okupansi | Praktikum Fisika Laboratorium",
-  description:
-    "Halaman Untuk melihat jadwal yang terisi pada laman web Praktikum Fisika Laboratorium",
-};
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}): Promise<Metadata> {
+  const { minggu } = mingguKuliah();
+
+  const selected =
+    typeof searchParams["week"] === "string"
+      ? parseInt(searchParams["week"])
+      : minggu;
+
+  return {
+    title: `Okupansi Lab Minggu Perkuliahan Ke-${selected} | Praktikum Fisika Laboratorium`,
+    description:
+      "Halaman Untuk melihat keterisian laboratorium pada laman web Praktikum Fisika Laboratorium, Departemen Fisika, Institut Teknologi Sepuluh Nopember",
+  };
+}
 
 export const dynamic = "force-dynamic";
 

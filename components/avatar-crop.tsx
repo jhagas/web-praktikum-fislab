@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { ChangeEventHandler, useEffect, useRef } from "react";
 import { useState } from "react";
@@ -10,6 +10,8 @@ import {
   Session,
   createClientComponentClient,
 } from "@supabase/auth-helpers-nextjs";
+import { revalidatePath } from "next/cache";
+import { ImSpinner2 } from "react-icons/im";
 
 function usePPUpdate() {
   const [user, setUser] = useState<Session["user"] | null>();
@@ -75,16 +77,20 @@ export function AvatarChange() {
   const [imageSrc, setImageSrc] = useState<any>(null);
   const file: any = useRef();
   const upload = usePPUpdate();
+  const [fetching, setFetching] = useState(false);
 
   const onCropComplete = useCallback((a: any, croppedAreaPixels: any) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
   const showCroppedImage = async () => {
+    setFetching(true);
     try {
       const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
       await upload(croppedImage);
       onClose();
+      setFetching(false);
+      revalidatePath("/settings");
     } catch (e) {
       console.error(e);
     }
@@ -136,14 +142,16 @@ export function AvatarChange() {
             <label htmlFor="ppChange" className="btn" onClick={onClose}>
               Batal
             </label>
-            {imageSrc && (
-              <label
-                htmlFor="ppChange"
-                className="btn"
-                onClick={showCroppedImage}
-              >
-                Selesai
-              </label>
+            {fetching ? (
+              <button className="btn">
+                <ImSpinner2 className="animate-spin" />
+              </button>
+            ) : (
+              imageSrc && (
+                <button className="btn" onClick={showCroppedImage}>
+                  Selesai
+                </button>
+              )
             )}
           </div>
         </div>
