@@ -48,7 +48,7 @@ export default function PilihanWaktu({
 
   const timeSelected = data?.jadwal
     ? formatInTimeZone(new Date(data.jadwal + "-0000"), "Africa/Abidjan", "HH:mm")
-    : null;
+    : "11:30";
 
   const [selected, setSelected] = useState(currentDate);
   const [hours, setHours] = useState(timeSelected);
