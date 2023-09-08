@@ -116,6 +116,10 @@ export default function TabelPraktikan({
                                   ))}
                                 </tbody>
                               </table>
+                              <div>
+                                <h2>Komentar</h2>
+                                <p>{data.komentar}</p>
+                              </div>
                             </div>
                             <div className="modal-action">
                               <label htmlFor={`nilai${index}`} className="btn">

@@ -82,8 +82,8 @@ export const mingguList = [
   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
 ];
 
-export const weekdays = [6.5, 9, 11.5];
-export const saturday = [2, 5.5, 8, 11.5];
+export const weekdays = [3.5, 6.5, 8.5, 11.5];
+export const saturday = [2, 4, 6, 8, 11.5];
 
 export function convertTime(data: number) {
   const hour = Math.floor(data);
