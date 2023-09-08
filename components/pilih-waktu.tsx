@@ -5,7 +5,6 @@ import "./react-datetime.css";
 import { Dispatch, SetStateAction, useState } from "react";
 import { changeTimeZone, convertTime, saturday, weekdays } from "@/lib/utils";
 import Loading from "./loading";
-import { useEffect } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import DateFormatter from "./date-formatter";
 import { format, subDays } from "date-fns";
@@ -47,31 +46,32 @@ export default function PilihanWaktu({
     : new Date();
 
   const timeSelected = data?.jadwal
-    ? formatInTimeZone(new Date(data.jadwal + "-0000"), "Africa/Abidjan", "HH:mm")
+    ? formatInTimeZone(
+        new Date(data.jadwal + "-0000"),
+        "Africa/Abidjan",
+        "HH:mm"
+      )
     : "11:30";
 
   const [selected, setSelected] = useState(currentDate);
   const [hours, setHours] = useState(timeSelected);
-  const [restrict, setRestrict] = useState<any>();
-
-  useEffect(() => {
-    async function getRestricted() {
-      const { data } = await supabase.rpc("dup_jadwal");
-      setRestrict(data);
-    }
-    getRestricted();
-  }, [data, supabase]);
+  const [restrict, setRestrict] = useState(false);
 
   const send = format(selected, "yyyy-MM-dd'T'" + hours + "':00'");
 
   async function onSetJadwal() {
-    await supabase
-      .from("user_praktikum_linker")
-      .update({ jadwal: send })
-      .eq("kelompok", kelompok)
-      .eq("kode_praktikum", praktikum);
-
-    trigger((state) => !state);
+    const { data } = await supabase.rpc("dup_jadwal");
+    const fire = data.find((d: string) => d === send);
+    setRestrict(true);
+    if (!fire) {
+      await supabase
+        .from("user_praktikum_linker")
+        .update({ jadwal: send })
+        .eq("kelompok", kelompok)
+        .eq("kode_praktikum", praktikum);
+      setRestrict(false);
+      trigger((state) => !state);
+    }
   }
 
   async function onHapusJadwal() {
@@ -92,8 +92,6 @@ export default function PilihanWaktu({
     );
   };
 
-  if (!restrict) return <Loading />;
-
   return (
     <div className="bg-slate-50 dark:bg-zinc-800 infodash rounded-lg shadow-md p-3 mt-5 max-w-lg mx-auto flex flex-col justify-center">
       {data?.jadwal ? (
@@ -104,9 +102,27 @@ export default function PilihanWaktu({
             formatStr="iiii, dd MMMM yyyy 'Pukul' HH:mm"
             className="text-sm text-center"
           />
+          {restrict && (
+            <>
+              <p className="text-center text-red-500 mt-2">
+                Lab penuh pada waktu yang anda pilih!!
+              </p>
+            </>
+          )}
         </>
       ) : (
-        <p className="text-center font-semibold text-xl">Jadwal Belum Diatur</p>
+        <>
+          <p className="text-center font-semibold text-xl">
+            Jadwal Belum Diatur
+          </p>
+          {restrict && (
+            <>
+              <p className="text-center text-red-500 mt-2">
+                Lab penuh pada waktu yang anda pilih!!
+              </p>
+            </>
+          )}
+        </>
       )}
       <label htmlFor="aturJadwal" className="btn btn-sm mt-3 mx-auto">
         Atur Jadwal
@@ -153,41 +169,17 @@ export default function PilihanWaktu({
                   </div>
                 ))}
           </div>
-          {restrict
-            .map((data: any) =>
-              changeTimeZone(
-                new Date(data + "-0000"),
-                "Asia/Jakarta"
-              ).toISOString()
-            )
-            .find((d: any) => d === send) ? (
-            <>
-              <p className="text-center text-red-500 mt-2">
-                Lab penuh pada waktu yang anda pilih!!
-              </p>
-              <div className="modal-action">
-                <label htmlFor="aturJadwal" className="btn">
-                  Batal
-                </label>
-              </div>
-            </>
-          ) : (
-            <div className="modal-action">
-              <label htmlFor="aturJadwal" className="btn">
-                Batal
-              </label>
-              <label
-                htmlFor="aturJadwal"
-                className="btn"
-                onClick={onHapusJadwal}
-              >
-                Hapus Jadwal
-              </label>
-              <label htmlFor="aturJadwal" className="btn" onClick={onSetJadwal}>
-                Selesai
-              </label>
-            </div>
-          )}
+          <div className="modal-action">
+            <label htmlFor="aturJadwal" className="btn">
+              Batal
+            </label>
+            <label htmlFor="aturJadwal" className="btn" onClick={onHapusJadwal}>
+              Hapus Jadwal
+            </label>
+            <label htmlFor="aturJadwal" className="btn" onClick={onSetJadwal}>
+              Selesai
+            </label>
+          </div>
         </div>
       </div>
     </div>
