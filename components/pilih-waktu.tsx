@@ -62,7 +62,6 @@ export default function PilihanWaktu({
   async function onSetJadwal() {
     const { data } = await supabase.rpc("dup_jadwal");
     const fire = data.find((d: string) => d === send);
-    setRestrict(true);
     if (!fire) {
       await supabase
         .from("user_praktikum_linker")
@@ -71,6 +70,8 @@ export default function PilihanWaktu({
         .eq("kode_praktikum", praktikum);
       setRestrict(false);
       trigger((state) => !state);
+    } else {
+      setRestrict(true);
     }
   }
 
