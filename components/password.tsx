@@ -58,21 +58,23 @@ export default function Password({ user }: { user: Session["user"] | null }) {
                 </label>
               ) : (
                 <>
-                  <label
-                    htmlFor="passwordChange"
-                    className="btn"
-                    onClick={() => setPassword("")}
-                  >
-                    Batal
-                  </label>
                   {fetching ? (
                     <button className="btn">
                       <ImSpinner2 className="animate-spin" />
                     </button>
                   ) : (
-                    <button type="submit" className="btn">
-                      Selesai
-                    </button>
+                    <>
+                      <label
+                        htmlFor="passwordChange"
+                        className="btn"
+                        onClick={() => setPassword("")}
+                      >
+                        Batal
+                      </label>
+                      <button type="submit" className="btn">
+                        Selesai
+                      </button>
+                    </>
                   )}
                 </>
               )}

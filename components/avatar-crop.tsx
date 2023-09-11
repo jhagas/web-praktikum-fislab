@@ -139,18 +139,20 @@ export function AvatarChange() {
             </div>
           )}
           <div className="modal-action">
-            <label htmlFor="ppChange" className="btn" onClick={onClose}>
-              Batal
-            </label>
             {fetching ? (
               <button className="btn">
                 <ImSpinner2 className="animate-spin" />
               </button>
             ) : (
               imageSrc && (
-                <button className="btn" onClick={showCroppedImage}>
-                  Selesai
-                </button>
+                <>
+                  <label htmlFor="ppChange" className="btn" onClick={onClose}>
+                    Batal
+                  </label>
+                  <button className="btn" onClick={showCroppedImage}>
+                    Selesai
+                  </button>
+                </>
               )
             )}
           </div>

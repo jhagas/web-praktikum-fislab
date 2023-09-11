@@ -9,14 +9,15 @@ import PenilaianPraktikan from "@/components/penilaian-praktikan";
 import Loading from "@/components/loading";
 
 type Praktikan = {
-  id: any;
-  kelompok: any;
-  kode_praktikum: any;
-  nilai: any;
+  id: string;
+  kelompok: string;
+  kode_praktikum: string;
+  nilai: string;
+  komentar: string;
   profiles: {
-    full_name: any;
-    nrp: any;
-    avatar_url: any;
+    full_name: string;
+    nrp: string;
+    avatar_url: string;
   };
 }[] | null;
 
@@ -65,7 +66,7 @@ export default function Main() {
       const { data }: any = await supabase
         .from("user_praktikum_linker")
         .select(
-          "id, kelompok, kode_praktikum, nilai, profiles(full_name, nrp, avatar_url)"
+          "id, kelompok, kode_praktikum, nilai, komentar, profiles(full_name, nrp, avatar_url)"
         )
         .order("nrp", { foreignTable: "profiles", ascending: false })
         .eq("praktikum_role", "praktikan")

@@ -116,8 +116,8 @@ export default function TabelPraktikan({
                                   ))}
                                 </tbody>
                               </table>
-                              <div>
-                                <h2>Komentar</h2>
+                              <div className="py-4 px-7 bg-zinc-50 shadow-md dark:bg-zinc-900 my-2 rounded-xl">
+                                <h2 className="font-bold text-lg mb-1">Komentar</h2>
                                 <p>{data.komentar}</p>
                               </div>
                             </div>

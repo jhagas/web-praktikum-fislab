@@ -9,24 +9,25 @@ import { ImSpinner2 } from "react-icons/im";
 
 type Props = {
   data: {
-    id: any;
-    kelompok: any;
-    kode_praktikum: any;
+    id: string;
+    kelompok: string;
+    kode_praktikum: string;
     nilai: any;
+    komentar: string;
     profiles: {
-      full_name: any;
-      nrp: any;
-      avatar_url: any;
+      full_name: string;
+      nrp: string;
+      avatar_url: string;
     };
   };
   index: number;
   info: {
     jadwal: any;
-    kelompok: any;
-    kode_praktikum: any;
+    kelompok: string;
+    kode_praktikum: string;
     praktikum: {
-      judul: any;
-      matkul: any;
+      judul: string;
+      matkul: string;
     };
   } | null;
   reexecute: () => void;
@@ -39,6 +40,7 @@ export default function PenilaianPraktikan({
   reexecute,
 }: Props) {
   const [nilai, setNilai] = useState(data.nilai);
+  const [komentar, setKomentar] = useState(data.komentar);
   const [safe, setSafe] = useState<boolean>();
   const [fetching, setFetching] = useState(false);
   const supabase = createClientComponentClient();
@@ -66,7 +68,7 @@ export default function PenilaianPraktikan({
     setFetching(true);
     const { error } = await supabase
       .from("user_praktikum_linker")
-      .update({ nilai: nilai })
+      .update({ nilai: nilai, komentar: komentar })
       .eq("id", data.id)
       .eq("kelompok", data.kelompok)
       .eq("kode_praktikum", data.kode_praktikum);
@@ -81,6 +83,10 @@ export default function PenilaianPraktikan({
   const options: any = {
     maximumFractionDigits: 2,
   };
+
+  const ganti =
+    data.komentar === komentar &&
+    JSON.stringify(nilai) === JSON.stringify(data.nilai);
 
   return (
     <div className="bg-slate-50 infodash dark:bg-zinc-800 shadow-md p-3 w-full rounded-lg min-w-min max-w-lg">
@@ -165,9 +171,22 @@ export default function PenilaianPraktikan({
                   );
                 })}
               </div>
+              <div
+                key={index}
+                className="min-w-min w-full py-4 px-3 sm:px-9 mx-auto"
+              >
+                <div>
+                  <label className="label-text infodash font-bold">Komentar</label>
+                  <input
+                    type="text"
+                    value={komentar}
+                    onChange={(e) => setKomentar(e.target.value)}
+                    className="input input-bordered w-full border-slate-300 focus:border-slate-500 focus:outline-none dark:bg-zinc-700 dark:border-zinc-500 focus:dark:border-zinc-300 dark:text-zinc-100 input-sm"
+                  />
+                </div>
+              </div>
               <div className="modal-action">
-                {JSON.stringify(nilai) === JSON.stringify(data.nilai) ||
-                safe ? (
+                {ganti || safe ? (
                   <label htmlFor={`penilaian${index}`} className="btn">
                     Batal
                   </label>

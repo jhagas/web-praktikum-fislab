@@ -9,6 +9,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import DateFormatter from "./date-formatter";
 import { format, subDays } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
+import { ImSpinner2 } from "react-icons/im";
 
 const dateFormat = (date: Date) =>
   changeTimeZone(
@@ -56,10 +57,12 @@ export default function PilihanWaktu({
   const [selected, setSelected] = useState(currentDate);
   const [hours, setHours] = useState(timeSelected);
   const [restrict, setRestrict] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const send = format(selected, "yyyy-MM-dd'T'" + hours + "':00'");
 
   async function onSetJadwal() {
+    setLoading(true);
     const { data } = await supabase.rpc("dup_jadwal");
     const fire = data.find((d: string) => d === send);
     if (!fire) {
@@ -73,9 +76,12 @@ export default function PilihanWaktu({
     } else {
       setRestrict(true);
     }
+    document.getElementById("aturJadwal")?.click();
+    setLoading(false);
   }
 
   async function onHapusJadwal() {
+    setLoading(true);
     await supabase
       .from("user_praktikum_linker")
       .update({ jadwal: null })
@@ -83,6 +89,8 @@ export default function PilihanWaktu({
       .eq("kode_praktikum", praktikum);
 
     trigger((state) => !state);
+    document.getElementById("aturJadwal")?.click();
+    setLoading(false);
   }
 
   const yesterday = subDays(changeTimeZone(new Date(), "Asia/Jakarta"), 1);
@@ -171,15 +179,27 @@ export default function PilihanWaktu({
                 ))}
           </div>
           <div className="modal-action">
-            <label htmlFor="aturJadwal" className="btn">
-              Batal
-            </label>
-            <label htmlFor="aturJadwal" className="btn" onClick={onHapusJadwal}>
-              Hapus Jadwal
-            </label>
-            <label htmlFor="aturJadwal" className="btn" onClick={onSetJadwal}>
-              Selesai
-            </label>
+            {loading ? (
+              <button className="btn">
+                <ImSpinner2 className="animate-spin" />
+              </button>
+            ) : (
+              <>
+                <label htmlFor="aturJadwal" className="btn">
+                  Batal
+                </label>
+                <label
+                  htmlFor="aturJadwal"
+                  className="btn"
+                  onClick={onHapusJadwal}
+                >
+                  Hapus Jadwal
+                </label>
+                <button type="submit" className="btn" onClick={onSetJadwal}>
+                  Selesai
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>

@@ -38,6 +38,7 @@ create table
     jadwal timestamp with time zone,
     minggu int2,
     nilai jsonb,
+    komentar text,
     PRIMARY KEY (id, kelompok, kode_praktikum)
   );
 
