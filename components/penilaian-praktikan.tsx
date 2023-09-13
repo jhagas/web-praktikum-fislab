@@ -156,6 +156,7 @@ export default function PenilaianPraktikan({
                       </label>
                       <input
                         type="number"
+                        step={0.01}
                         min={desc[data as keyof typeof desc].min}
                         max={desc[data as keyof typeof desc].max}
                         name={data}
