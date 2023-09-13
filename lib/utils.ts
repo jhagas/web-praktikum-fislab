@@ -17,17 +17,17 @@ export function changeTimeZone(date: Date | string, timeZone: string) {
 }
 
 export const desc = {
-  prelab: { nama: "Pre-Lab dan In-Lab", min: 1, max: 10, bobot: "45%" },
-  abstrak: { nama: "Abstrak", min: 1, max: 10, bobot: "5%" },
+  prelab: { nama: "Pre-Lab dan In-Lab", min: 0, max: 10, bobot: "45%" },
+  abstrak: { nama: "Abstrak", min: 0, max: 10, bobot: "5%" },
   pendahuluan_metodologi: {
     nama: "Pendahuluan & Metodologi",
-    min: 1,
+    min: 0,
     max: 10,
     bobot: "4%",
   },
-  postlab: { nama: "Post-Lab", min: 1, max: 10, bobot: "30%" },
-  kesimpulan: { nama: "Kesimpulan", min: 1, max: 10, bobot: "4%" },
-  format: { nama: "Format POMITS", min: 1, max: 10, bobot: "4%" },
+  postlab: { nama: "Post-Lab", min: 0, max: 10, bobot: "30%" },
+  kesimpulan: { nama: "Kesimpulan", min: 0, max: 10, bobot: "4%" },
+  format: { nama: "Format POMITS", min: 0, max: 10, bobot: "4%" },
   waktu: { nama: "Ketepatan Waktu", min: 0, max: 1, bobot: "8%" },
 };
 
@@ -79,7 +79,7 @@ export function rangeMinggu(week: number) {
 }
 
 export const mingguList = [
-  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+  3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
 ];
 
 export const weekdays = [3.5, 6.5, 8.5, 11.5];

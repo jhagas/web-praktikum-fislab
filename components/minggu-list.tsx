@@ -13,21 +13,19 @@ export default function ListMinggu({ minggu, state }: Params) {
       <div className="overflow-x-scroll rounded-lg overflow-clip w-full max-w-fit shadow-md scrollbar-hide">
         <div className="join">
           {mingguList.map((data, i) => {
-            if (data >= minggu)
-              return (
-                <Link
-                  key={i}
-                  href={`?week=${data}`}
-                  className={`btn join-item border-0 ${
-                    data === state
-                      ? "!bg-zinc-700 !font-extrabold !text-zinc-100 dark:!bg-zinc-700"
-                      : "!bg-zinc-100 !text-zinc-500 hover:!bg-zinc-300 dark:!bg-zinc-800 hover:!text-zinc-600 dark:hover:!text-zinc-100 !font-normal"
-                  }`}
-                >
-                  {data}
-                </Link>
-              );
-            return null;
+            return (
+              <Link
+                key={i}
+                href={`?week=${data}`}
+                className={`btn join-item border-0 ${
+                  data === state
+                    ? "!bg-zinc-700 !font-extrabold !text-zinc-100 dark:!bg-zinc-700"
+                    : "!bg-zinc-100 !text-zinc-500 hover:!bg-zinc-300 dark:!bg-zinc-800 hover:!text-zinc-600 dark:hover:!text-zinc-100 !font-normal"
+                }`}
+              >
+                {data}
+              </Link>
+            );
           })}
         </div>
       </div>

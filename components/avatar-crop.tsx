@@ -143,17 +143,19 @@ export function AvatarChange() {
               <button className="btn">
                 <ImSpinner2 className="animate-spin" />
               </button>
+            ) : imageSrc ? (
+              <>
+                <label htmlFor="ppChange" className="btn" onClick={onClose}>
+                  Batal
+                </label>
+                <button className="btn" onClick={showCroppedImage}>
+                  Selesai
+                </button>
+              </>
             ) : (
-              imageSrc && (
-                <>
-                  <label htmlFor="ppChange" className="btn" onClick={onClose}>
-                    Batal
-                  </label>
-                  <button className="btn" onClick={showCroppedImage}>
-                    Selesai
-                  </button>
-                </>
-              )
+              <label htmlFor="ppChange" className="btn" onClick={onClose}>
+                Batal
+              </label>
             )}
           </div>
         </div>
