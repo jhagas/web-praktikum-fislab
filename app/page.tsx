@@ -20,7 +20,9 @@ export default async function Main() {
       .from("user_praktikum_linker")
       .select("praktikum_role")
       .eq("id", session.user.id);
-    roles = data?.map((data) => data.praktikum_role).filter(unique);
+    roles = data
+      ?.map((data: { praktikum_role: any }) => data.praktikum_role)
+      .filter(unique);
   }
 
   let { data } = await supabase
@@ -35,13 +37,13 @@ export default async function Main() {
 
   if (roles) {
     if (
-      roles.find((element) => element === "aslab") &&
-      roles.find((element) => element === "praktikan")
+      roles.find((element: string) => element === "aslab") &&
+      roles.find((element: string) => element === "praktikan")
     ) {
       redirect("/aslab");
-    } else if (roles.find((element) => element === "aslab")) {
+    } else if (roles.find((element: string) => element === "aslab")) {
       redirect("/aslab");
-    } else if (roles.find((element) => element === "praktikan")) {
+    } else if (roles.find((element: string) => element === "praktikan")) {
       redirect("/praktikan");
     }
   }

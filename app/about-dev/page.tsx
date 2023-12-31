@@ -51,8 +51,9 @@ export default function About() {
             </Link>
           </div>
           <p className="text-center">
-            Bila ada kendala yang berkaitan dengan website ini, seperti lupa
-            password dan sebagainya. Silahkan hubungi saya melalui WhatsApp
+            Saya adalah Mahasiswa S1 Fisika ITS angkatan 2020 yang menyukai web
+            development sebagai side-project. Selain itu saya juga sangat
+            tertarik di bidang IoT dan juga elektronika
           </p>
         </span>
         <div className="text-gray-600 dark:text-zinc-400 mt-4 block text-sm text-center">

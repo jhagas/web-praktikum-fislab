@@ -4,40 +4,37 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { ImSpinner2 } from "react-icons/im";
 import { useDark } from "@/lib/dark";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { AuthError } from "@supabase/supabase-js";
-import Link from "next/link";
 
 export default function Index() {
   const [dark, toogleDark] = useDark();
   const supabase = createClientComponentClient();
-  const [credentials, setCredentials] = useState({ email: "", password: "" });
-  const [error, setError] = useState<AuthError | null>();
+  const [credentials, setCredentials] = useState("");
+  const [data, setData] = useState<string | undefined>();
+  const [error, setError] = useState<any>();
   const [fetching, setFetching] = useState(false);
-  const router = useRouter();
 
   const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFetching(true);
-    const { error } = await supabase.auth.signInWithPassword({
-      email: credentials.email + "@student.its.ac.id",
-      password: credentials.password,
-    });
+
+    const { data, error } = await supabase.auth.resetPasswordForEmail(
+      credentials + "@student.its.ac.id",
+      {
+        redirectTo: `${window.location.origin}/new-password`,
+      }
+    );
 
     setFetching(false);
 
     if (error) {
       setError(error);
     } else {
-      router.push("/");
-      router.refresh();
+      setData("Email berhasil dikirimkan");
     }
   };
 
   const handleChange = (event: { target: { name: any; value: any } }) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    setCredentials((values) => ({ ...values, [name]: value }));
+    setCredentials(event.target.value);
   };
 
   return (
@@ -57,6 +54,16 @@ export default function Index() {
                 </p>
               </div>
             </div>
+            <p className="text-center font-semibold mt-4 dark:text-gray-50">
+              Lupa Kata Sandi, ketikkan NRP anda
+            </p>
+            <p className="text-center">
+              Tautan reset akun akan dikirimkan ke email ITS anda, cek folder
+              spam/junk email di <b>NRP@student.its.ac.id</b>
+            </p>
+            <p className="text-center">
+              Tautan dari email anda berlaku selama 5 menit
+            </p>
             {error ? (
               <div className="text-center text-red-500 dark:text-red-400 mt-2">
                 Error signing in, {error.message}
@@ -72,30 +79,16 @@ export default function Index() {
                 name="email"
                 placeholder="NRP"
                 className="login"
-                value={credentials.email}
+                value={credentials}
                 onChange={handleChange}
               />
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                className="login"
-                value={credentials.password}
-                onChange={handleChange}
-              />
-              <Link
-                href="/forgot-password"
-                className="text-center my-1 text-blue-600 dark:text-blue-500 underline"
-              >
-                Lupa kata sandi?
-              </Link>
               {fetching ? (
                 <button className="btn mt-4" disabled>
                   <ImSpinner2 className="animate-spin" />
                 </button>
               ) : (
                 <button className="btn mt-4" type="submit">
-                  Masuk
+                  {data ? data : "Reset Akun"}
                 </button>
               )}
             </form>

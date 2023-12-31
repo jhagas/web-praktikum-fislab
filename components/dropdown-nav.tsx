@@ -70,9 +70,9 @@ export default function Dropdown({ data, nama, nrp, roles }: params) {
           </Link>
         </li>
         <li>
-          <Link href="/about-admin" className="nav-item gap-3 focus:dark:text-zinc-50">
+          <Link href="/about-dev" className="nav-item gap-3 focus:dark:text-zinc-50">
             <BsKey size={16} />
-            <p>Tentang Admin</p>
+            <p>Tentang Developer</p>
           </Link>
         </li>
         <li>
